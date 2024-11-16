@@ -103,9 +103,7 @@ function App() {
               )}
             </div>
           ))
-        ) : (
-          <p>No results found.</p>
-        )}
+        ) : ( <p>No results found.</p> )}
       </div>
     </div>
   );

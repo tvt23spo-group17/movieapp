@@ -9,7 +9,6 @@ app.use(cors());
 
 const PORT = process.env.PORT || 5000;
 const TMDB_TOKEN = process.env.TMDB_TOKEN;
-const movieSearch = 'https://api.themoviedb.org/3/search/movie?query=QUERY&include_adult=false&language=en-US&page=1'
 
 app.get('/api/movies', async (req, res) => {
   try {
@@ -55,6 +54,28 @@ app.get('/api/tv', async (req, res) => {
   }
 });
 
+app.get('/api/person', async (req, res) => {
+  try {
+    const response = await axios.get(
+      `https://api.themoviedb.org/3/person/popular`,
+      {
+        params: {
+          language: 'en-US',
+          page: 1
+        },
+        headers: {
+          accept: 'application/json',
+          Authorization: `Bearer ${TMDB_TOKEN}`,
+        },
+      }
+    );
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error fetching popular people from TMDb:', error);
+    res.status(500).json({ error: 'Failed to fetch popular people from TMDb' });
+  }
+});
+
 app.get('/api/search', async (req, res) => {
   const { userQuery } = req.query;
   if (!userQuery || userQuery.trim() === '') {
@@ -83,7 +104,7 @@ app.get('/api/search', async (req, res) => {
   }
 });
 
-app.get('/api/advancedSearch', async (req, res) => {
+/*app.get('/api/advancedSearch', async (req, res) => {
   const { query, type } = req.query;
 
   if (!query || !type) {
@@ -114,7 +135,7 @@ app.get('/api/advancedSearch', async (req, res) => {
     res.status(400).json({ error: 'Invalid type parameter' });
   }
 });
-
+*/
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

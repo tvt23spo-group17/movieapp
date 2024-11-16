@@ -3,70 +3,38 @@ import axios from 'axios';
 import './App.css';
 
 function App() {
-  const [searchMode, setSearchMode] = useState('basic'); // 'basic' or 'advanced'
-  const [category, setCategory] = useState('movies');
-  const [basicSearchQuery, setBasicSearchQuery] = useState('');
-  const [submittedBasicSearchQuery, setSubmittedBasicSearchQuery] = useState('');
-  const [advancedSearchQuery, setAdvancedSearchQuery] = useState('');
-  const [submittedAdvancedSearchQuery, setSubmittedAdvancedSearchQuery] = useState('');
-  const [advancedSearchType, setAdvancedSearchType] = useState('movie'); // 'movie', 'tv', 'person'
   const [items, setItems] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [submittedSearchQuery, setSubmittedSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [category, setCategory] = useState('movies');
 
-  const handleBasicSearchSubmit = (e) => {
+  const handleSearchSubmit = (e) => {
     e.preventDefault();
-    if (basicSearchQuery.trim() !== '') {
-      setSubmittedBasicSearchQuery(basicSearchQuery.trim());
-      setCategory('basicSearch');
+    if (searchQuery.trim() !== '') {
+      setSubmittedSearchQuery(searchQuery.trim());
+      setCategory('search');
     }
   };
-  const handleAdvancedSearchSubmit = (e) => {
-    e.preventDefault();
-    if (advancedSearchQuery.trim() !== '') {
-      setSubmittedAdvancedSearchQuery(advancedSearchQuery.trim());
-      setCategory('advancedSearch');
-    }
-  };
+
   const handleCategoryChange = (newCategory) => {
     setCategory(newCategory);
     setSearchResults([]);
-    setSubmittedBasicSearchQuery('');
-    setSubmittedAdvancedSearchQuery('');
-    setBasicSearchQuery('');
-    setAdvancedSearchQuery('');
-  };
-  const handleSearchModeChange = (mode) => {
-    setSearchMode(mode);
-    setSearchResults([]);
-    setSubmittedBasicSearchQuery('');
-    setSubmittedAdvancedSearchQuery('');
-    setBasicSearchQuery('');
-    setAdvancedSearchQuery('');
-    setCategory('movies'); // or 'tv'
+    setSubmittedSearchQuery('');
+    setSearchQuery('');
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (category === 'basicSearch' && submittedBasicSearchQuery !== '') {
-          // Search (Multi)
+        if (category === 'search' && submittedSearchQuery !== '') {
           const response = await axios.get('http://localhost:5000/api/search', {
             params: {
-              userQuery: submittedBasicSearchQuery,
+              userQuery: submittedSearchQuery,
             },
           });
           setSearchResults(response.data.results);
-        } else if (category === 'advancedSearch' && submittedAdvancedSearchQuery !== '') {
-          // Advanced Search
-          const response = await axios.get('http://localhost:5000/api/advancedSearch', {
-            params: {
-              query: submittedAdvancedSearchQuery,
-              type: advancedSearchType,
-            },
-          });
-          setSearchResults(response.data.results);
-        } else if (category !== 'basicSearch' && category !== 'advancedSearch') {
-          // Default popular movies or TV shows
+        } else if (category !== 'search') {
           const response = await axios.get(`http://localhost:5000/api/${category}`);
           setItems(response.data.results);
         }
@@ -76,130 +44,63 @@ function App() {
     };
 
     fetchData();
-  }, [category, submittedBasicSearchQuery, submittedAdvancedSearchQuery, advancedSearchType]);
+  }, [category, submittedSearchQuery]);
 
-  const displayItems =
-    category === 'basicSearch' || category === 'advancedSearch' ? searchResults : items;
+  const displayItems = category === 'search' ? searchResults : items;
 
   return (
     <div className="App">
       <h1>
-        {category === 'movies'
-          ? 'Popular Movies'
-          : category === 'tv'
-          ? 'Popular TV Shows'
-          : category === 'basicSearch'
-          ? `Search Results for "${submittedBasicSearchQuery}"`
-          : category === 'advancedSearch'
-          ? `Advanced Search Results for "${submittedAdvancedSearchQuery}" (${advancedSearchType})`
-          : ''}
+        {category === 'movies' ? 'Popular Movies'
+          : category === 'tv' ? 'Popular TV Shows'
+          : category === 'person' ? 'Popular Actors'
+          : `Search Results for "${submittedSearchQuery}"`}
       </h1>
+
       <div className="navigation">
         <button
           className={category === 'movies' ? 'active' : ''}
           onClick={() => handleCategoryChange('movies')}
-        >
-          Movies
-        </button>
+        >Movies</button>
         <button
           className={category === 'tv' ? 'active' : ''}
           onClick={() => handleCategoryChange('tv')}
-        >
-          TV Shows
-        </button>
-      </div>
-
-      <div className="search-mode-toggle">
+        >TV Shows</button>
         <button
-          className={searchMode === 'basic' ? 'active' : ''}
-          onClick={() => handleSearchModeChange('basic')}
-        >
-          Basic Search
-        </button>
-        <button
-          className={searchMode === 'advanced' ? 'active' : ''}
-          onClick={() => handleSearchModeChange('advanced')}
-        >
-          Advanced Search
-        </button>
-      </div>
+          className={category === 'person' ? 'active' : ''}
+          onClick={() => handleCategoryChange('person')}
+        >Actors</button>
 
-      {searchMode === 'basic' ? (
-        <form className="search-form" onSubmit={handleBasicSearchSubmit}>
+        <form className="search-form" onSubmit={handleSearchSubmit}>
           <input
             type="text"
             placeholder="Search movies and TV shows"
-            value={basicSearchQuery}
-            onChange={(e) => setBasicSearchQuery(e.target.value)}
-          />
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}/>
           <button type="submit">Search</button>
         </form>
-        ) : (
-        <form className="search-form" onSubmit={handleAdvancedSearchSubmit}>
-          <div className="radio-buttons">
-            <label>
-              <input
-                type="radio"
-                value="movie"
-                checked={advancedSearchType === 'movie'}
-                onChange={(e) => setAdvancedSearchType(e.target.value)}
-              />
-              Movies
-            </label>
-            <label>
-              <input
-                type="radio"
-                value="tv"
-                checked={advancedSearchType === 'tv'}
-                onChange={(e) => setAdvancedSearchType(e.target.value)}
-              />
-              TV Shows
-            </label>
-            <label>
-              <input
-                type="radio"
-                value="person"
-                checked={advancedSearchType === 'person'}
-                onChange={(e) => setAdvancedSearchType(e.target.value)}
-              />
-              Actors
-            </label>
-          </div>
-          <input
-            type="text"
-            placeholder="Search..."
-            value={advancedSearchQuery}
-            onChange={(e) => setAdvancedSearchQuery(e.target.value)}
-          />
-          <button type="submit">Advanced Search</button>
-        </form>
-      )}
+      </div>
 
       <div className="movie-list">
         {displayItems.length > 0 ? (
           displayItems.map((item) => (
             <div key={item.id} className="movie-card">
-              {item.profile_path || item.poster_path ? (
+              {(item.poster_path || item.profile_path) && (
                 <img
-                  src={`https://image.tmdb.org/t/p/w200${
-                    item.profile_path || item.poster_path
-                  }`}
+                  src={`https://image.tmdb.org/t/p/w200${item.poster_path || item.profile_path}`}
                   alt={item.title || item.name}
                 />
-              ) : null}
-              <h2>{item.title || item.name}</h2>
-              {item.known_for_department && (
-                <p>
-                  <strong>Known For:</strong> {item.known_for_department}
-                </p>
               )}
-              {(item.release_date || item.first_air_date) && (
+              <h2>{item.title || item.name}</h2>
+              {category !== 'person' && (
+              <>
                 <p>
                   <strong>Release Date:</strong>{' '}
                   {item.release_date || item.first_air_date || 'N/A'}
                 </p>
+                <p>{item.overview}</p>
+              </>
               )}
-              {item.overview && <p>{item.overview}</p>}
             </div>
           ))
         ) : (

@@ -5,6 +5,7 @@ const { Pool } = pkg;
 import express from 'express';
 import cors from 'cors';
 import jwt from 'jsonwebtoken';
+import tmdbRouter from './routes/tmdbRouter.js';
 
 const app = express();
 const router = express.Router();
@@ -64,13 +65,14 @@ router.post('/login', async (req, res) => {
     }
     
     const user = result.rows[0];
+    console.log('User from database:', user);
     const passwordMatch = bcryptjs.compareSync(password, user.password);
     if (!passwordMatch) {
       return res.status(400).json({ message: 'Invalid email or password' });
     }
 
     const token = jwt.sign(
-      { id: user.id, email: user.email },
+      { id: user.user_id, email: user.email },
       process.env.JWT_SECRET,
       { expiresIn: '1h' }
     );
@@ -78,7 +80,7 @@ router.post('/login', async (req, res) => {
     res.status(200).json({
       message: 'User logged in successfully',
       token: token,
-      user: { id: user.id, email: user.email },
+      user: { id: user.user_id, email: user.email },
     });
   } catch (err) {
     console.error('Database error:', err);
@@ -86,15 +88,37 @@ router.post('/login', async (req, res) => {
   }
 });
 
+router.delete('/delete-account', verifyToken, async (req, res) => {
+  const userId = req.user.id;
+  const { password } = req.body;
+
+  try {
+    const userResult = await pool.query('SELECT password FROM users WHERE user_id = $1', [userId]);
+    const user = userResult.rows[0];
+    const passwordMatch = bcryptjs.compareSync(password, user.password);
+    if (!passwordMatch) {
+      return res.status(400).json({ message: 'Incorrect password' });
+    }
+    await pool.query('DELETE FROM users WHERE user_id = $1', [userId]);
+    res.status(200).json({ message: 'Account deleted successfully' });
+  } catch (err) {
+    console.error('Database error:', err);
+    res.status(500).json({ message: 'Database error' });
+  }
+});
+
+
 function verifyToken(req, res, next) {
   const bearerHeader = req.headers['authorization'];
   if (typeof bearerHeader !== 'undefined') {
     const bearerToken = bearerHeader.split(' ')[1];
-    jwt.verify(bearerToken, process.env.JWT_SECRET, (err, authData) => {
+    jwt.verify(bearerToken, process.env.JWT_SECRET, (err, decoded) => {
       if (err) {
-        res.sendStatus(403);
+        console.error('Token verification error:', err);
+        return res.status(403).json({ message: 'Invalid token' });
       } else {
-        req.authData = authData;
+        console.log('Decoded token:', decoded);
+        req.user = decoded;
         next();
       }
     });
@@ -111,6 +135,7 @@ app.get('/protected', verifyToken, (req, res) => {
 });
 
 app.use('/', router);
+app.use('/api', tmdbRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

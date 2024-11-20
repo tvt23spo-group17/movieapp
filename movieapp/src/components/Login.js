@@ -7,7 +7,7 @@ function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
-  const { setAuth } = useContext(AuthContext);
+  const { setAuth} = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -17,7 +17,8 @@ function LoginForm() {
         email,
         password,
       });
-      localStorage.setItem('token', response.data.token);
+      const token = response.data.token;
+      localStorage.setItem('token', token);
       setAuth(true);
       navigate('/dashboard');
     } catch (error) {

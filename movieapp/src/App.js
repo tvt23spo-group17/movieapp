@@ -1,25 +1,37 @@
-import logo from './logo.svg';
+
 import './App.css';
+import { useEffect, useState, useRef } from 'react';
+import {
+  BrowserRouter as Router,
+  Routes, Route,
+  Link
+} from 'react-router-dom';
+import Navbar from './components/navbar';
+import Groups from './components/groups';
+import Finnkino from './components/finnkino';
+import './components/navbar.css';
+import Reviews from './components/reviews';
+import Tmdb from './components/tmdb';
 
 function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+  
+       
+       <Navbar />
+
+
+       <Routes>
+       <Route path="/Finnkino" element={<Finnkino />} />    
+       <Route path="/Reviews" element={<Reviews />} />
+       <Route path="/Groups" element={<Groups />} />
+       <Route path="/Tmdb" element={<Tmdb />} />
+       </Routes>
+      
+    </Router>
   );
 }
+
 
 export default App;

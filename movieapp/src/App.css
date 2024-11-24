@@ -1,0 +1,47 @@
+.App {
+    text-align: center;
+    padding: 20px;
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  .navigation {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  .movie-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .movie-card {
+    width: 250px;
+    margin: 15px;
+    text-align: left;
+    background-color: #f0f0f0;
+    padding: 10px;
+  }
+  
+  .movie-card img {
+    width: 100%;
+  }
+  
+  .movie-card h2 {
+    font-size: 1.2em;
+    margin: 10px 0;
+  }
+  
+  .movie-card p {
+    font-size: 0.9em;
+    color: #333;
+  }
+  
+  .logout-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }

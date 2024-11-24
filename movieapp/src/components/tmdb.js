@@ -28,14 +28,14 @@ const Tmdb = () => {
     const fetchData = async () => {
       try {
         if (category === 'search' && submittedSearchQuery !== '') {
-          const response = await axios.get('http://localhost:5000/api/search', {
+          const response = await axios.get('http://localhost:3001/api/search', {
             params: {
               userQuery: submittedSearchQuery,
             },
           });
           setSearchResults(response.data.results);
         } else if (category !== 'search') {
-          const response = await axios.get(`http://localhost:5000/api/${category}`);
+          const response = await axios.get(`http://localhost:3001/api/${category}`);
           setItems(response.data.results);
         }
       } catch (error) {

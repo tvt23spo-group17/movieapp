@@ -3,7 +3,7 @@ import './App.css';
 import { useEffect, useState, useRef, useContext } from 'react';
 import {
   BrowserRouter as Router,
-  Routes, Route,
+  Routes, Route, 
   Link
 } from 'react-router-dom';
 import Navbar from './components/navbar';
@@ -17,6 +17,14 @@ import PrivateRoute from './components/PrivateRoute';
 import Login from './components/Login';
 import Account from './components/Account';
 import Register from './components/Register';
+import GroupPage from './components/GroupPage';
+import GroupManagement from './components/GroupManagement';
+
+
+
+
+
+
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -29,7 +37,7 @@ function App() {
     <Router>
        
        <Navbar isAuthenticated={isAuthenticated} />
-
+       
 
        <Routes>
         <Route path="/Finnkino" element={<Finnkino />} />    
@@ -39,6 +47,10 @@ function App() {
         <Route path="/Register" element={<Register />} />
         <Route path="/Login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
         <Route path="/LogOut" element={<LogOut setIsAuthenticated={setIsAuthenticated} />} />
+        <Route path="/GroupManagement" element={<GroupManagement />} />      
+        <Route path="/group/:id" element={<GroupPage />} />
+       
+      
         <Route 
         path="/Account" element={
           <PrivateRoute>
@@ -46,7 +58,7 @@ function App() {
           </PrivateRoute>
           } />
        </Routes>
-      
+       
     </Router>
   );
 }

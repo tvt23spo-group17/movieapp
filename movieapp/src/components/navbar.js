@@ -17,12 +17,19 @@ function Navbar({ isAuthenticated }) {
           <li><Link to="/Reviews">Reviews</Link></li>
           <li><Link to="/Tmdb">Tmdb</Link></li>
           <li><Link to="/Groups">Groups</Link></li>
-          <li><Link to="/Account">Account</Link></li>
+          
+          </ul>
+
+          <ul className='navbar-right'>
 
           {isAuthenticated ? ( <li><Link to="/LogOut">Log Out</Link></li>
           ) : ( <li><Link to="/LogIn">Log In</Link></li> )}
+          <li><Link to="/Account">Account</Link></li>
+          <li><Link to="/Profile">Profile</Link></li>
+          <li><Link to="/GroupManagement">Group Management</Link></li>
         </ul>
       </nav>
+     
     );
   }
   

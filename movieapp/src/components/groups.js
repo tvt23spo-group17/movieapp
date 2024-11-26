@@ -9,10 +9,7 @@ const addGroup = () => {
     setGroups([...groups,group])
     setGroup('')
 }
-const deleteGroup = (deleted) => {
-    const withoutRemoved = groups.filter((item) => item !== deleted)
-    setGroups(withoutRemoved)
-}
+// tänne vain get metodilla listaus groupeista
 
 
 
@@ -38,7 +35,7 @@ onKeyDown={e =>{
 {
 groups.map(item => (
     <li>{item}
-    <button classname='delete-button' onClick={() => deleteGroup(item)}>Delete</button>
+    
     </li>
 ))
 }

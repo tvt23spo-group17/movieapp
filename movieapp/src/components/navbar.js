@@ -1,16 +1,18 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { AuthContext } from '../AuthContext';
+import { useUser } from '../context/UseUser';
 
+function Navbar() {
+  const { user } = useUser();
 
+  useEffect(() => {
+    console.log('Navbar re-rendered. User state:', user);
+  }, [user]);
 
-function Navbar({ isAuthenticated }) {
-    const auth = React.useContext(AuthContext);
-    useEffect(() => {
-      console.log('Navbar re-rendered. Auth state:', auth.auth);
-    }, [auth]);
-    return (
-      <nav>
+  const isAuthenticated = !!user.accessToken;
+
+  return (
+    <nav>
         <ul className='navbar'>
           
           <li><Link to="/finnkino">Finnkino</Link></li>
@@ -29,10 +31,9 @@ function Navbar({ isAuthenticated }) {
           <li><Link to="/GroupManagement">Group Management</Link></li>
         </ul>
       </nav>
-     
-    );
-  }
-  
-  export default Navbar;
+  );
+}
+
+export default Navbar;
 
 

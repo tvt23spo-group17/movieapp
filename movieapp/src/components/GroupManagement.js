@@ -8,26 +8,31 @@ const url = 'http://localhost:3001'
 const GroupManagement = () => {
     const [group, setGroup] = useState('')
     const [groups, setGroups] = useState([])
+    const [userId, setUserId] = useState(1);
+
+
+//userID tarvitaan login puolelta
 
 const addGroup = () => {
-    axios.post(url + '/create', {
-        name: group
+    axios.post(url + '/api/groups', {
+        name: group,
+        creator_user_id: userId
     })
     .then(response =>{
-        setGroups([...groups,{id: response.data.id,name: group}])
+        setGroups([...groups, { id: response.data.group.group_id, name: group }]);
         setGroup('')
     }).catch(error =>{
-        alert(error.response.data.error ? error.response.data.error : error)
+        alert(error.response?.data.error ? error.response.data.error : error.message)
     })
   
 }
 const deleteGroup = (id) => {
-    axios.delete(url + '/delete/' + id)
+    axios.delete(url + '/api/groups/' + id)
     .then(response => {
         const withoutRemoved = groups.filter((item) => item.id !== id)
         setGroups(withoutRemoved)
     }).catch(error =>{
-        alert(error.response.data.error ? error.response.data.error : error)
+        alert(error.response.data.error ? error.response.data.error : error.message)
     })
    
 }

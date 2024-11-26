@@ -1,23 +1,17 @@
-import React, { useEffect, useContext } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../AuthContext';
+import { useUser } from '../context/UseUser';
 
-function LogOut({ setIsAuthenticated }) {
-  const { auth, setAuth } = useContext(AuthContext);
+function Logout() {
+  const { signOut } = useUser();
   const navigate = useNavigate();
 
   useEffect(() => {
-    localStorage.removeItem('token');
-    setAuth(false);
-    setIsAuthenticated(false);
+    signOut();
     navigate('/Login');
-  }, [setAuth, setIsAuthenticated, navigate]);
-
-  useEffect(() => {
-    console.log('Auth state is:', auth);
-  }, [auth]);
+  }, [signOut, navigate]);
 
   return null;
 }
 
-export default LogOut;
+export default Logout;

@@ -4,6 +4,8 @@ import cors from 'cors';
 import { verifyToken } from './verifyToken.js';
 import tmdbRouter from './routes/tmdbRouter.js';
 import userRouter from './routes/userRouter.js';
+import reviewRouter from './routes/reviewRouter.js';
+import finnkinoRouter from './routes/finnkinoRouter.js';
 
 const app = express();
 app.use(cors());
@@ -20,6 +22,8 @@ app.get('/protected', verifyToken, (req, res) => {
 });
 
 app.use('/', userRouter);
+app.use('/reviews', reviewRouter);
+app.use('/finnkino', finnkinoRouter);
 app.use('/api', tmdbRouter);
 
 app.listen(PORT, () => {

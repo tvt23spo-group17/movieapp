@@ -27,7 +27,7 @@ router.post('/api/groups', async (req, res) => {
 }
 });
 
-router.delete('/api/groups:id', verifyToken, async (req, res) => {
+router.delete('/api/groups/:id', verifyToken, async (req, res) => {
     const { id } = req.params;
     try {
         const groupQuery = 'SELECT * FROM user_group WHERE group_id = $1';

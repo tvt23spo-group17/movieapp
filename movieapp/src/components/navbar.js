@@ -26,6 +26,7 @@ function Navbar() {
 
           {isAuthenticated ? ( <li><Link to="/LogOut">Log Out</Link></li>
           ) : ( <li><Link to="/LogIn">Log In</Link></li> )}
+          <li><Link to="/Register">Register</Link></li>
           <li><Link to="/Account">Account</Link></li>
           <li><Link to="/Profile">Profile</Link></li>
           <li><Link to="/GroupManagement">Group Management</Link></li>

@@ -43,7 +43,7 @@ function App() {
           <Route path="/Login" element={<Login />} />
           <Route path="/Logout" element={<Logout />} />
           <Route path="/GroupManagement" element={<GroupManagement />} />      
-          <Route path="/group/:id" element={<GroupPage />} />
+          <Route path="/GroupPage/:id" element={<GroupPage />} />
           <Route
             path="/Account"
             element={

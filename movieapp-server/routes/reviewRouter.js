@@ -6,7 +6,19 @@ import Router from 'express';
 import { verifyToken } from '../verifyToken.js';
 const router = Router();
 
-router.get('/get-reviews', async (req, res) => {
+router.get('/all-reviews', async (req, res) => {
+    try {
+      const reviewsResult = await pool.query(
+        'SELECT users.email, movie_mappings.local_title, review.tmdb_id, review.text, review.stars, review.timestamp FROM review INNER JOIN users ON review.user_id = users.user_id INNER JOIN movie_mappings ON review.tmdb_id = movie_mappings.tmdb_id ORDER BY review.timestamp DESC LIMIT 20 OFFSET 0;');
+  
+      res.json(reviewsResult.rows);
+    } catch (error) {
+      console.error('Error fetching reviews:', error.message);
+      res.status(500).json({ error: 'Error fetching reviews' });
+    }
+});
+
+router.get('/get-review', async (req, res) => {
     const { tmdb_id } = req.query;
   
     if (!tmdb_id) {

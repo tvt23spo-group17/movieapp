@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-
+import TmdbDetails from './TmdbDetails'; // Import the new component
 
 const Tmdb = () => {
   const [items, setItems] = useState([]);
@@ -8,6 +8,7 @@ const Tmdb = () => {
   const [submittedSearchQuery, setSubmittedSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [category, setCategory] = useState('movies');
+  const [selectedItem, setSelectedItem] = useState(null); // New state for selected item
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -22,6 +23,7 @@ const Tmdb = () => {
     setSearchResults([]);
     setSubmittedSearchQuery('');
     setSearchQuery('');
+    setSelectedItem(null); // Reset selected item when category changes
   };
 
   useEffect(() => {
@@ -48,6 +50,20 @@ const Tmdb = () => {
 
   const displayItems = category === 'search' ? searchResults : items;
 
+  // Function to handle item click
+  const handleItemClick = (item) => {
+    let itemCategory = category;
+    if (category === 'search') {
+      itemCategory = item.media_type;
+    }
+    setSelectedItem({...item, itemCategory});
+  };
+
+  // Function to close the movie details
+  const handleCloseDetails = () => {
+    setSelectedItem(null);
+  };
+
   return (
     <div className="App">
       <h1>
@@ -61,52 +77,70 @@ const Tmdb = () => {
         <button
           className={category === 'movies' ? 'active' : ''}
           onClick={() => handleCategoryChange('movies')}
-        >Movies</button>
+        >
+          Movies
+        </button>
         <button
           className={category === 'tv' ? 'active' : ''}
           onClick={() => handleCategoryChange('tv')}
-        >TV Shows</button>
+        >
+          TV Shows
+        </button>
         <button
           className={category === 'person' ? 'active' : ''}
           onClick={() => handleCategoryChange('person')}
-        >Actors</button>
+        >
+          Actors
+        </button>
 
         <form className="search-form" onSubmit={handleSearchSubmit}>
           <input
             type="text"
             placeholder="Search movies and TV shows"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}/>
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
           <button type="submit">Search</button>
         </form>
       </div>
 
-      <div className="movie-list">
-        {displayItems.length > 0 ? (
-          displayItems.map((item) => (
-            <div key={item.id} className="movie-card">
-              {(item.poster_path || item.profile_path) && (
-                <img
-                  src={`https://image.tmdb.org/t/p/w200${item.poster_path || item.profile_path}`}
-                  alt={item.title || item.name}
-                />
-              )}
-              <h2>{item.title || item.name}</h2>
-              {category !== 'person' && (
-              <>
-                <p>
-                  <strong>Release Date:</strong>{' '}
-                  {item.release_date || item.first_air_date || 'N/A'}
-                </p>
-                <p>{item.overview}</p>
-              </>
-              )}
-            </div>
-          ))
-        ) : ( <p>No results found.</p> )}
-      </div>
+      {selectedItem ? (
+        // Render TmdbDetails when an item is selected
+        <TmdbDetails item={selectedItem} onClose={handleCloseDetails} />
+      ) : (
+        <div className="movie-list">
+          {displayItems.length > 0 ? (
+            displayItems.map((item) => (
+              <div
+                key={item.id}
+                className="movie-card"
+                onClick={() => handleItemClick(item)} // Handle click event
+              >
+                {(item.poster_path || item.profile_path) && (
+                  <img
+                    src={`https://image.tmdb.org/t/p/w200${item.poster_path || item.profile_path}`}
+                    alt={item.title || item.name}
+                  />
+                )}
+                <h2>{item.title || item.name}</h2>
+                {category !== 'person' && (
+                  <>
+                    <p>
+                      <strong>Release Date:</strong>{' '}
+                      {item.release_date || item.first_air_date || 'N/A'}
+                    </p>
+                    <p>{item.overview}</p>
+                  </>
+                )}
+              </div>
+            ))
+          ) : (
+            <p>No results found.</p>
+          )}
+        </div>
+      )}
     </div>
   );
-}
+};
 
 export default Tmdb;

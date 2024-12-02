@@ -13,7 +13,7 @@ const Finnkino = () => {
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [reviews, setReviews] = useState([]);
-
+  
   function getToday() {
     const today = new Date();
     return today.toLocaleDateString('fi-FI');

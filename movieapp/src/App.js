@@ -16,6 +16,8 @@ import PrivateRoute from './components/PrivateRoute';
 import Login from './components/Login';
 import Account from './components/Account';
 import Register from './components/Register';
+import GroupPage from './components/GroupPage';
+import GroupManagement from './components/GroupManagement';
 
 function App() {
   return (
@@ -29,6 +31,9 @@ function App() {
           <Route path="/Register" element={<Register />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/Logout" element={<Logout />} />
+          <Route path="/GroupManagement" element={<GroupManagement />} />      
+          <Route path="/GroupPage/:id" element={<GroupPage />} />
+            
           <Route
             path="/Account"
             element={

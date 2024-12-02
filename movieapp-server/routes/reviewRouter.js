@@ -18,7 +18,7 @@ router.get('/all-reviews', async (req, res) => {
     }
 });
 
-router.get('/get-review', async (req, res) => {
+router.get('/get-reviews', async (req, res) => {
     const { tmdb_id } = req.query;
   
     if (!tmdb_id) {

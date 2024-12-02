@@ -7,14 +7,14 @@ const MovieDetails = ({
   selectedMovie,
   setShowReviewModal,
   reviews,
-  fetchReviews,
+  fetchReviews
 }) => {
   const handleReviewSubmitted = () => {
     fetchReviews(selectedMovie.tmdb_id);
   };
 
   return (
-    <div className="modal">
+    <div className="finnkino-details">
       <div className="modal-content">
         <h2>
           {selectedMovie.title}{' '}
@@ -23,6 +23,7 @@ const MovieDetails = ({
             : ''}
         </h2>
         <ReviewSection
+          onClose={() => setShowReviewModal(false)}
           setShowReviewModal={setShowReviewModal}
           reviews={reviews}
         />

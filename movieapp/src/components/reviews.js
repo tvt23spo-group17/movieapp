@@ -19,13 +19,13 @@ const Reviews = () => {
 
     return (
         <div>
-            <h2>Reviews</h2>
-            <ul>
+            <h2>All Reviews</h2>
+            <ul className="review-list">
                 {reviews.map((review) => (
                     <li key={review.tmdb_id}>
                         <p><strong>{review.local_title}</strong></p>
-                        <p>{review.text}</p>
-                        <p>Rating: {review.stars}</p>
+                        <p>Review: {review.text}</p>
+                        <p>Stars: {review.stars}</p>
                         <p>By: {review.email}</p>
                         <p>On: {new Date(review.timestamp).toLocaleString()}</p>
                     </li>

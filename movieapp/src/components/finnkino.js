@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import React from 'react';
+import ReviewForm from './ReviewForm';
+import MovieDetails from './MovieDetails';
 
 const Finnkino = () => {
   const [areas, setAreas] = useState([]);
@@ -11,7 +13,7 @@ const Finnkino = () => {
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [reviews, setReviews] = useState([]);
-
+  
   function getToday() {
     const today = new Date();
     return today.toLocaleDateString('fi-FI');
@@ -79,11 +81,13 @@ const Finnkino = () => {
       }
 
       const schedulesData = Array.from(shows).map((show) => {
+        const eventSmallImagePortrait = show.getElementsByTagName('EventSmallImagePortrait')[0]?.textContent;
         const title = show.getElementsByTagName('Title')[0]?.textContent;
         const eventTime = show.getElementsByTagName('dttmShowStart')[0]?.textContent;
         const productionYear = show.getElementsByTagName('ProductionYear')[0]?.textContent;
+        const theatreAuditorium = show.getElementsByTagName('TheatreAuditorium')[0]?.textContent;
 
-        return { title, eventTime, productionYear };
+        return { title, eventTime, productionYear, eventSmallImagePortrait, theatreAuditorium };
       });
 
       setSchedules(schedulesData);
@@ -181,12 +185,17 @@ const Finnkino = () => {
             const eventDate = new Date(schedule.eventTime);
             const formattedEventTime = eventDate.toLocaleString('fi-FI');
             return (
-              <div key={index}>
-                <strong>
-                  {schedule.title} {schedule.productionYear ? `(${schedule.productionYear})` : ''}
+              <div className="finnkino-item" key={index}>
+                <strong onClick={() => handleReviewClick(schedule)}>
+                  <img src={schedule.eventSmallImagePortrait}></img> 
                 </strong>{' '}
-                - {formattedEventTime}
-                <button onClick={() => handleReviewClick(schedule)}>Review</button>
+                <div>
+                <p><strong>
+                  {schedule.title} 
+                  {schedule.productionYear ? `(${schedule.productionYear})` : ''}
+                </strong></p>
+                <p>{formattedEventTime} {schedule.theatreAuditorium}</p>
+                </div>
               </div>
             );
           })
@@ -196,81 +205,14 @@ const Finnkino = () => {
       </div>
 
       {showReviewModal && selectedMovie && (
-        <div className="modal">
-          <div className="modal-content">
-            <h2>
-              {selectedMovie.title} {selectedMovie.productionYear ? `(${selectedMovie.productionYear})` : ''}
-            </h2>
-            <button onClick={() => setShowReviewModal(false)}>Close</button>
-            <h3>Reviews:</h3>
-            {reviews.length > 0 ? (
-              reviews.map((review, index) => (
-                <div key={index}>
-                  <p>
-                    <strong>{review.user_email}</strong> ({review.stars} stars):
-                  </p>
-                  <p>{review.text}</p>
-                </div>
-              ))
-            ) : (
-              <p>No reviews yet.</p>
-            )}
-            <h3>Submit a Review:</h3>
-            <ReviewForm tmdb_id={selectedMovie.tmdb_id} />
-          </div>
-        </div>
+        <MovieDetails
+          selectedMovie={selectedMovie}
+          setShowReviewModal={setShowReviewModal}
+          reviews={reviews}
+          fetchReviews={fetchReviews}
+        />
       )}
     </div>
-  );
-};
-
-const ReviewForm = ({ tmdb_id }) => {
-  const [text, setText] = useState('');
-  const [stars, setStars] = useState(5);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // Assume user_id is obtained from authentication
-    const user_id = 1; // Placeholder value
-
-    try {
-      const response = await fetch('http://localhost:3001/reviews/add-review', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user_id, tmdb_id, text, stars }),
-      });
-      const data = await response.json();
-
-      if (data.error) {
-        console.error('Error submitting review:', data.error);
-      } else {
-        console.log(data.message);
-        // Optionally, refresh reviews
-      }
-    } catch (error) {
-      console.error('Error submitting review:', error);
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>Stars:</label>
-        <select value={stars} onChange={(e) => setStars(e.target.value)}>
-          {[1, 2, 3, 4, 5].map((s) => (
-            <option key={s} value={s}>
-              {s}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div>
-        <label>Review:</label>
-        <textarea value={text} onChange={(e) => setText(e.target.value)} required />
-      </div>
-      <button type="submit">Submit Review</button>
-    </form>
   );
 };
 

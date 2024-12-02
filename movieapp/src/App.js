@@ -19,17 +19,6 @@ import Register from './components/Register';
 import GroupPage from './components/GroupPage';
 import GroupManagement from './components/GroupManagement';
 
-
-
-
-
-
-
-
-
-
-
-
 function App() {
   return (
       <Router>
@@ -44,6 +33,7 @@ function App() {
           <Route path="/Logout" element={<Logout />} />
           <Route path="/GroupManagement" element={<GroupManagement />} />      
           <Route path="/GroupPage/:id" element={<GroupPage />} />
+            
           <Route
             path="/Account"
             element={

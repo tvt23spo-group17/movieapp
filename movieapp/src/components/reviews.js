@@ -1,56 +1,38 @@
-import { useState, useRef } from 'react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const Reviews = () => {
-    const [review, setReview] = useState('')
-    const [reviews, setReviews] = useState([])
+    const [reviews, setReviews] = useState([]);
 
-const addReview = () => {
-    setReviews([...reviews,review])
-    setReview('')
-}
-const deleteReview = (deleted) => {
-    const withoutRemoved = reviews.filter((item) => item !== deleted)
-    setReviews(withoutRemoved)
-}
+    useEffect(() => {
+        const fetchReviews = async () => {
+            try {
+                const response = await axios.get('http://localhost:3001/reviews/all-reviews');
+                setReviews(response.data);
+            } catch (error) {
+                console.error('Error fetching reviews:', error.message);
+            }
+        };
 
+        fetchReviews();
+    }, []);
 
-
-return (
-<div className="Reviews">
-Reviews
-
-<div className="reviews">
-<form>
-<input
-placeholder='Add new review'
-value={review}
-onChange={e => setReview(e.target.value)}
-onKeyDown={e =>{
-    if (e.key === 'Enter') {
-        e.preventDefault()
-        addReview()
-    }
-}}
-/>
-</form>
-<ul>
-{
-reviews.map(item => (
-    <li>{item}
-    <button classname='delete-button' onClick={() => deleteReview(item)}>Delete</button>
-    </li>
-))
-}
-</ul>
-
-</div>
-</div>
-)
-}
-
-
-
-
+    return (
+        <div>
+            <h2>All Reviews</h2>
+            <ul className="review-list">
+                {reviews.map((review) => (
+                    <li key={review.tmdb_id}>
+                        <p><strong>{review.local_title}</strong></p>
+                        <p>Review: {review.text}</p>
+                        <p>Stars: {review.stars}</p>
+                        <p>By: {review.email}</p>
+                        <p>On: {new Date(review.timestamp).toLocaleString()}</p>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
+};
 
 export default Reviews;

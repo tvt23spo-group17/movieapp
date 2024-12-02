@@ -129,13 +129,13 @@ app.get('/get-tmdb-id', async (req, res) => {
 
       const options = {
         method: 'GET',
-        url: 'https://api.themoviedb.org/3/search/movie',
+        url: 'https://api.themoviedb.org/3/search/multi',
         params: {
           query: title,
-          include_adult: 'false', // Ensure it's a string
+          include_adult: 'false',
           language: 'en-US',
           page: '1',
-          year: year ? year.toString() : undefined, // Convert to string if provided
+          year: year ? year.toString() : undefined,
         },
         headers: {
           accept: 'application/json',
@@ -146,10 +146,13 @@ app.get('/get-tmdb-id', async (req, res) => {
       const response = await axios.request(options);
 
       if (response.data.results && response.data.results.length > 0) {
-        // Take the first result as the best match
-        const movieResult = response.data.results[0];
-
-        const tmdb_id = movieResult.id;
+        const filteredResults = response.data.results.filter(
+          (result) => result.media_type === 'movie' || result.media_type === 'tv'
+        );
+        if (filteredResults.length > 0) {
+          const mediaResult = filteredResults[0];
+          const tmdb_id = mediaResult.id;
+          const media_type = mediaResult.media_type; // movie or tv into the db
 
         // Insert mapping into database
         await pool.query(
@@ -163,10 +166,12 @@ app.get('/get-tmdb-id', async (req, res) => {
         return res.status(404).json({ error: 'Movie not found in TMDB' });
       }
     }
+  }
   } catch (error) {
     console.error('Error fetching TMDB ID:', error.response ? error.response.data : error.message);
     res.status(500).json({ error: 'Error fetching TMDB ID' });
   }
+
 });
 
 export default app;

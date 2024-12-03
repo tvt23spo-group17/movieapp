@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import React from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
@@ -6,12 +6,17 @@ import { Link } from 'react-router-dom';
 const url = 'http://localhost:3001'
 
 const GroupManagement = () => {
-    const [group, setGroup] = useState('')
+    const [group, setGroup] = useState("")
     const [groups, setGroups] = useState([])
     const [userId, setUserId] = useState(1);
 
 
 //userID tarvitaan login puolelta
+useEffect = () =>{
+   
+
+}
+
 
 const addGroup = () => {
     axios.post(url + '/api/groups', {

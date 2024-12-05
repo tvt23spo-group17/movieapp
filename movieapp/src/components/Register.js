@@ -7,6 +7,7 @@ function RegisterForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const [passwordErrors, setPasswordErrors] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -18,6 +19,31 @@ function RegisterForm() {
     } catch (error) {
       setMessage(error.response?.data?.message || 'An error occurred.');
     }
+  };
+
+  const handlePasswordChange = (e) => {
+    const newPassword = e.target.value;
+    setPassword(newPassword);
+    const errors = validatePassword(newPassword);
+    setPasswordErrors(errors);
+  };
+
+  const validatePassword = (password) => {
+    const errors = [];
+
+    const minLength = /.{8,}/;
+    if (!minLength.test(password)) {
+      errors.push('Password must be at least 8 characters long.');
+    }
+    const hasUpperCase = /[A-Z]/;
+    if (!hasUpperCase.test(password)) {
+      errors.push('Password must contain at least one uppercase letter.');
+    }
+    const hasNumber = /\d/;
+    if (!hasNumber.test(password)) {
+      errors.push('Password must contain at least one number.');
+    }
+    return errors;
   };
 
   return (
@@ -35,11 +61,18 @@ function RegisterForm() {
       <input
         type="password"
         value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        onChange={handlePasswordChange}
         placeholder="Password"
         required
       />
-      <button type="submit">Register</button>
+      <button type="submit" disabled={passwordErrors.length > 0}>Register</button>
+      {passwordErrors.length > 0 && (
+        <ul>
+          {passwordErrors.map((error, index) => (
+            <li key={index}>{error}</li>
+          ))}
+        </ul>
+      )}
       {message && <p>{message}</p>}
     </form>
   );

@@ -55,6 +55,11 @@ router.post('/token', async (req, res) => {
 
 router.post('/register', (req, res) => {
     const { email, password } = req.body;
+    // Validate password
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    if (!passwordRegex.test(password)) {
+      return res.status(400).json({ message: "Password doesn't meet the requirements" });
+    }
   
     pool.query('SELECT * FROM users WHERE email = $1', [email], (err, result) => {
       if (err) {

@@ -52,6 +52,9 @@
     text-align: left;
     width: 40%;
   }
+  .finnkino-details {
+    width: 320px;
+  }
   .finnkino-item {
     margin-top: 10px;
     display: flex;
@@ -79,4 +82,9 @@
   }
   .review-list li p {
     margin: 5px 0 5px 0;
+  }
+  .rating-img {
+    width: auto;
+    height: 24px;
+    float: right;
   }

@@ -10,13 +10,13 @@ export default function UserProvider({ children }) {
   const [user, setUser] = useState(
     userFromSessionStorage
       ? JSON.parse(userFromSessionStorage)
-      : { email: '', accessToken: '', refreshToken: '', userId: '' }
+      : null
   );
 
   const signUp = async (email, password) => {
     try {
       await axios.post(`${url}/register`, { email, password });
-      setUser({ email: '', accessToken: '', refreshToken: '', userId: '' });
+      setUser(null);
     } catch (error) {
       console.error('signUp error:', error);
       throw error;
@@ -36,7 +36,7 @@ export default function UserProvider({ children }) {
       setUser(newUser);
       sessionStorage.setItem('user', JSON.stringify(newUser));
     } catch (error) {
-      setUser({ email: '', accessToken: '', refreshToken: '', userId: '' });
+      setUser(null);
       throw error;
     }
   };
@@ -47,7 +47,7 @@ export default function UserProvider({ children }) {
     } catch (error) {
       console.error('Logout error:', error);
     }
-    setUser({ email: '', accessToken: '', refreshToken: '', userId: '' });
+    setUser(null);
     sessionStorage.removeItem('user');
   };
 

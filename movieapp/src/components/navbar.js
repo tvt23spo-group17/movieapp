@@ -9,7 +9,7 @@ function Navbar() {
     console.log('Navbar re-rendered. User state:', user);
   }, [user]);
 
-  const isAuthenticated = !!user.accessToken;
+  const isAuthenticated = user && !!user.accessToken;
 
   return (
     <nav>

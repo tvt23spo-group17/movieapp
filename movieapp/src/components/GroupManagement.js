@@ -74,11 +74,11 @@ const deleteGroup = (group_id) => {
    
 }
 
-const sendJoinRequest = (user) => {
-    console.log(user_id)
-    axios.post(url + `/groupMember/${user_id}/join`, {
-        user_id: user_id
-        
+const sendJoinRequest = (group_id, user) => {
+    console.log(user_id, group_id)
+    axios.post(url + `/groupMember/${group_id}/join/`, {
+        user_id: user_id,
+        group_id: group_id
     })
     .then(response => {
         alert('Request sent'); //tämä varmaan pois kun törkeen näkönen

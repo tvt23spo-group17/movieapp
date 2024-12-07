@@ -11,24 +11,29 @@ const Groups = () => {
 
 
 
-//groupid listaus
-useEffect(() => {
-  testi()
+//tämä valmis
+
+ 
     const fetchUserGroups = async () => {
       try {
         const response = await axios.get('http://localhost:3001/api/groups2');
-        setGroups(response.data); 
+        setGroups(response.data);
+        setError(null);
       } catch (err) {
-        setError('Error fetching user groups');
+        setError('Error no connection');
         console.error(err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchUserGroups();
+    useEffect(() => {
+      fetchUserGroups(); 
   }, []);
 
+
+
+/*
   const testi = async (requestId) => {
     try {
       const response = await axios.post('http://localhost:3001/api/groupstesti');
@@ -38,18 +43,21 @@ useEffect(() => {
       console.error('ei testii', error);
     }
   };
-
+*/
 
 return (
 <div className="groups">
     Groups
 
 <div className="groupList">
-
+  {}
+{loading}
+{}
+{error}
 <ul>
         {groups.map((group) => (
           <li key={group.group_id}>
-            <strong>{group.name}</strong> (Created by User ID: {group.creator_user_id})
+            <strong>{group.name}</strong> 
           </li>
         ))}
       </ul>

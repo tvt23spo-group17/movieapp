@@ -18,8 +18,10 @@ import Account from './components/Account';
 import Register from './components/Register';
 import GroupPage from './components/GroupPage';
 import GroupManagement from './components/GroupManagement';
+import Profile from './components/Profile';
 
 function App() {
+ 
   return (
       <Router>
         <Navbar />
@@ -31,14 +33,18 @@ function App() {
           <Route path="/Register" element={<Register />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/Logout" element={<Logout />} />
-          <Route path="/GroupManagement" element={<GroupManagement />} />      
-          <Route path="/GroupPage/:id" element={<GroupPage />} />
-            
+      
+          <Route path="/GroupManagement" element={<PrivateRoute><GroupManagement /></PrivateRoute>} />      
+          <Route path="/GroupManagement/:group_Id" element={<PrivateRoute><GroupPage /></PrivateRoute>} />
+          <Route path="/Profile" element={<PrivateRoute><Profile /></PrivateRoute>} /> 
+
+
           <Route
             path="/Account"
             element={
               <PrivateRoute>
                 <Account />
+               
               </PrivateRoute>
             }
           />

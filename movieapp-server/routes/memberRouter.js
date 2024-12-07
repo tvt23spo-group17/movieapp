@@ -7,8 +7,70 @@ import { verifyToken } from '../verifyToken.js';
 
 const router = Router();
 
-router.get('/member/:groupId/pendingRequests', async (req, res) => {
-    const groupId = req.params.groupId;
+
+router.get('/member/list/:group_id', async (req, res) => {
+  const { group_id } = req.params;
+    try {
+      const result = await pool.query(
+        `SELECT u.user_id
+        FROM group_members gm
+        JOIN users u ON gm.user_id = u.user_id
+        WHERE gm.group_id = $1`,
+        [group_id]
+      ); 
+      res.json(result.rows);
+    } catch (error) {
+      console.error('Error members:', error);
+      res.status(500).json({ error: 'Error members' });
+    }
+  });
+
+//pitää muuttaa että deletoi vaan kylmästi kaikki rejected pois
+  //join request siivous rejected pois
+  router.delete('/member/:groupId/remove/:requestId', async (req, res) => {
+    const { groupId, requestId } = req.params;
+    try {
+        const result = await db.query(
+        'DELETE FROM join_request WHERE request_id = $1 AND group_id = $2',
+        [requestId, groupId]
+      );
+    if (result.rowCount === 0) {
+     return res.status(404).json({ message: 'request not found' });
+      }
+     res.status(200).json({ message: 'deleted' });
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ error: 'Internal error' });
+    }
+  });
+
+router.post('/member/:groupId/accept/:requestId', async (req, res) => {
+    const { groupId, requestId } = req.params; 
+    try {
+      const { rows: requestRows } = await db.query(
+        'SELECT * FROM join_request WHERE request_id = $1 AND group_id = $2',
+        [requestId, groupId]
+      );
+    if (requestRows.length === 0) {
+        return res.status(404).json({ message: 'no request' });
+      }
+      const userId = requestRows[0].user_id;
+      const insertResult = await db.query(
+        'INSERT INTO group_members (group_id, user_id, role) VALUES ($1, $2, $3)',
+        [groupId, userId, 'member']
+      );
+    }
+    catch (error) {
+      console.error('Error accepting request:', error);
+      res.status(500).json({ error: 'internal error' });
+    }
+  });
+  
+
+
+
+router.get('/member/:group_Id/pendingRequests', async (req, res) => {
+    const group_id = req.params.group_Id;
   
     try {
       const result = await pool.query(
@@ -16,7 +78,7 @@ router.get('/member/:groupId/pendingRequests', async (req, res) => {
          FROM join_request r
          JOIN users u ON r.user_id = u.user_id
          WHERE r.group_id = $1 AND r.status = 'pending'`,
-        [groupId]
+        [group_id]
       );
       res.json(result.rows);
     } catch (error) {
@@ -25,8 +87,8 @@ router.get('/member/:groupId/pendingRequests', async (req, res) => {
     }
   });
 
-  router.post('/member/:groupId/accept/:requestId', async (req, res) => {
-    const { groupId, requestId } = req.params;
+  router.post('/member/:group_Id/accept/:requestId', async (req, res) => {
+    const { group_Id, requestId } = req.params;
   
     try {
       const result = await pool.query(
@@ -34,7 +96,7 @@ router.get('/member/:groupId/pendingRequests', async (req, res) => {
          SET status = 'accepted'
          WHERE request_id = $1 AND group_id = $2 AND status = 'pending'
          RETURNING *`,
-        [requestId, groupId]
+        [requestId, group_Id]
       );
   
       if (result.rows.length === 0) {
@@ -50,30 +112,29 @@ router.get('/member/:groupId/pendingRequests', async (req, res) => {
 
 
 
-  router.post('/member/:groupId/reject/:requestId', async (req, res) => {
-    const { groupId, requestId } = req.params;
+ router.post('/member:group_Id/reject/:requestId', async (req, res) => {
+    const { group_Id, requestId } = req.params;
   
     try {
-      const result = await pool.query(
-        `UPDATE join_request
-         SET status = 'rejected'
-         WHERE request_id = $1 AND group_id = $2 AND status = 'pending'
-         RETURNING *`,
-        [requestId, groupId]
+      const result = await pool.query(`UPDATE join_request SET status = 'rejected' WHERE request_id = $1 AND group_id = $2 AND status = 'pending' RETURNING *`,
+        [requestId, group_Id]
       );
   
       if (result.rows.length === 0) {
         return res.status(404).json({ error: 'Empty request' });
       }
-  
       res.json(result.rows[0]); 
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Error' });
     }
   });
-  
-  module.exports = router;
+
+
+
+
+
+  export default router;
 
 
 

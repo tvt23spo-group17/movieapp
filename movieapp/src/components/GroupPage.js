@@ -4,36 +4,80 @@ import React from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useUser } from '../context/UseUser';
+import './GroupPage.css';
+
 
 const url = 'http://localhost:3001'
 
 const GroupPage = () => {
-  const { id } = useParams(); 
-
+  const { group_Id } = useParams(); 
+const group_id = group_Id
 
   const [member, setMember] = useState('')
   const [members, setMembers] = useState([])
   const [userId, setUserId] = useState();
   const [pendingRequests, setPendingRequests] = useState([]);
+  const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    
 //tämäkin täytyy olla sisäänkirjautumisen takana
+console.log('Request URL:', url + `/api/member/${group_Id}/pendingRequests`);
 
-//id täytyy muuttaa groupId kun haluaaa ottaa backendiin yhteyttä
   useEffect(() => {
-    const fetchPendingRequests = async () => {
-      try {
-        const response = await axios.get(url + `/api/member/${id}/pendingRequests`);
-        setPendingRequests(response.data); 
-      } catch (error) {
-        console.error('Error fetching pending requests:', error);
+    
+
+    updateMembers();
+
+  }, []);
+
+  const fetchMembers = async (group_id) => {
+    try {
+     
+      const response = await axios.get(`http://localhost:3001/member/list/${group_id}`);
+      setMembers(response.data);
+      console.log(response)
+      setError(null);
+    } catch (err) {
+      setError('Error no connection');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const updateMembers = async () => {
+    try {
+    
+      for (const request of pendingRequests) {
+        if (request.status === 'rejected') {
+         //console.log()
+          await axios.delete(url + `/member/${group_Id}/remove/${request.request_id}`);
+          console.log(`Request ${request.request_id} rejected and deleted`);
+        } else if (request.status === 'accepted') {
+         await axios.post(url + `/member/${group_Id}/transfer/${request.request_id}`);
+         console.log(`Request ${request.request_id} accepted and member added`);
+        }
       }
-    };
 
-    fetchPendingRequests();
-  }, [id]);
+      fetchMembers(group_id);
+      fetchPendingRequests();
+    } catch (error) {
+      console.error('Error updating member statuses:', error);
+    }
+  };
 
-const handleReject = async (requestId) => {
+
+  const fetchPendingRequests = async () => {
+    try {
+      const response = await axios.get(url + `/member/${group_Id}/pendingRequests`);
+      setPendingRequests(response.data); 
+    } catch (error) {
+      console.error('Error fetching pending requests:', error);
+    }
+  };
+
+const rejectMember = async (requestId) => {
   try {
-    const response = await axios.post(url + `/api/member/${id}/reject/${requestId}`);
+    const response = await axios.post(url + `/member/${group_Id}/reject/${requestId}`);
     setPendingRequests(pendingRequests.filter(req => req.request_id !== requestId));
     console.log('Request rejected:', response.data);
   } catch (error) {
@@ -44,7 +88,8 @@ const handleReject = async (requestId) => {
 
 const addMember = async (requestId) => {
   try {
-    const response = await axios.post(url + `/api/member/${id}/accept/${requestId}`);
+    
+    const response = await axios.post(url + `/member/${group_Id}/accept/${requestId}`);
     setPendingRequests(pendingRequests.filter(req => req.request_id !== requestId));
     console.log('Join group:', response.data);
   } catch (error) {
@@ -55,7 +100,8 @@ const addMember = async (requestId) => {
 
 
 const deleteMember = (requestId) => {
-    axios.delete(url + '/api/member/' + requestId)
+  console.log(requestId)
+    axios.delete(url + '/member/' + requestId)
     .then(response => {
         const withoutRemoved = members.filter((item) => item.requestId !== requestId)
         setMembers(withoutRemoved)
@@ -64,26 +110,40 @@ const deleteMember = (requestId) => {
     })
    
 }
-
+//USER LEAVE GROUP !!!!!
 
   return (
     <div className="Group-page">
       Add new members
       <div className="Memberlist"></div>
-      {pendingRequests.length > 0 ? (
-        <ul>
-          {pendingRequests.map((request) => (
-            <li key={request.request_id}>
-              <p>{request.username} has requested to join the group</p>
-              <button onClick={() => addMember(request.request_id)}>Add member</button>
-              <button onClick={() => handleReject(request.request_id)}>Decline member</button>
-              <button onClick={() => deleteMember(request.request_id)}>Delete member</button>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No pending requests.</p>
-      )}
+      <ul>
+  <h3>Members</h3>
+  {members.length > 0 ? (
+    members.map((member) => (
+      <li key={member.group_id}>
+        <strong>{member.name}</strong>
+      </li>
+    ))
+  ) : (
+  <p></p>
+  )}
+</ul>
+
+<ul>
+  <h3>Pending Requests</h3>
+  {pendingRequests.length > 0 ? (
+    pendingRequests.map((request) => (
+      <li key={request.request_id}>
+        <p>{request.user_id} has requested to join the group</p>
+        <button onClick={() => addMember(request.request_id)}>Add member</button>
+        <button onClick={() => rejectMember(request.request_id)}>Decline member</button>
+
+      </li>
+    ))
+  ) : (
+    <p>No pending requests.</p>
+  )}
+</ul>
     </div>
   );
 };

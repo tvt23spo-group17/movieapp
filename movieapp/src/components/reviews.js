@@ -39,34 +39,34 @@ const Reviews = () => {
 
     return (
         <div>
-            <h2>All Reviews</h2>
+          <h2>All Reviews</h2>
+          {selectedItem ? (
+            // If an item is selected, show TmdbDetails
+            <TmdbDetails
+              item={selectedItem}
+              onClose={handleCloseDetails}
+              category={selectedItem.itemCategory} 
+            />
+          ) : (
+            // Otherwise, show the list of reviews
             <ul className="review-list">
-                {reviews.map((review) => (
-                    // Use a unique key, e.g. review.review_id, which should be unique
-                    <li
-                        key={review.review_id}
-                        onClick={() => handleReviewClick(review)}
-                        style={{ cursor: 'pointer' }} // Add a pointer cursor to indicate clickable
-                    >
-                        <p><strong>{review.local_title}</strong></p>
-                        <p>Review: {review.text}</p>
-                        <p>Stars: {review.stars}</p>
-                        <p>By: {review.email}</p>
-                        <p>On: {new Date(review.timestamp).toLocaleString()}</p>
-                    </li>
-                ))}
+              {reviews.map((review) => (
+                <li
+                  key={review.review_id}
+                  onClick={() => handleReviewClick(review)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <p><strong>{review.local_title}</strong></p>
+                  <p>Review: {review.text}</p>
+                  <p>Stars: {review.stars}</p>
+                  <p>By: {review.email}</p>
+                  <p>On: {new Date(review.timestamp).toLocaleString()}</p>
+                </li>
+              ))}
             </ul>
-
-            {/* Conditionally render the TmdbDetails component if showDetails is true and we have a selectedItem */}
-            {showDetails && selectedItem && (
-                <TmdbDetails
-                    item={selectedItem}
-                    onClose={handleCloseDetails}
-                    category={selectedItem.itemCategory} // Pass the category
-                />
-            )}
+          )}
         </div>
-    );
+      );
 };
 
 export default Reviews;

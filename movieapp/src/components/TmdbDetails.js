@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ReviewForm from './ReviewForm';
 import ReviewSection from './ReviewSection';
+import FavoritesToggle from './FavoritesToggle';
 import { useUser } from '../context/UseUser';
 
 const TmdbDetails = ({ item, onClose, category }) => {
@@ -120,6 +121,7 @@ const TmdbDetails = ({ item, onClose, category }) => {
           <p>{details.biography}</p>
         </>
       )}
+      <FavoritesToggle tmdb_id={item.id} />
       {(category !== 'person' || 'tv') && (
         <>
           <ReviewSection 

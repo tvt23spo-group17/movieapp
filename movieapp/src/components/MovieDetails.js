@@ -3,6 +3,7 @@ import React from 'react';
 import ReviewForm from './ReviewForm';
 import ReviewSection from './ReviewSection';
 import { useUser } from '../context/UseUser';
+import FavoritesToggle from './FavoritesToggle';
 
 const MovieDetails = ({
   selectedMovie,
@@ -10,10 +11,10 @@ const MovieDetails = ({
   reviews,
   fetchReviews
 }) => {
+  const { user } = useUser();
   const handleReviewSubmitted = () => {
     fetchReviews(selectedMovie.tmdb_id);
   };
-  const { user } = useUser();
   const eventDate = new Date(selectedMovie.eventTime);
   const formattedEventTime = eventDate.toLocaleString('fi-FI');
 
@@ -30,6 +31,9 @@ const MovieDetails = ({
         <p>{selectedMovie.genres}<img className='rating-img' src={selectedMovie.ratingImageUrl} /></p>
         <p>{selectedMovie.presentationMethodAndLanguage}</p>
         <p>{formattedEventTime}{' '}{selectedMovie.theatreAuditorium}</p>
+        {user && selectedMovie.tmdb_id && (
+          <FavoritesToggle tmdb_id={selectedMovie.tmdb_id} />
+        )}
         <ReviewSection
           onClose={() => setShowReviewModal(false)}
           setShowReviewModal={setShowReviewModal}

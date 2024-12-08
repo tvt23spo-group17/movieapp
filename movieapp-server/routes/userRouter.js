@@ -186,4 +186,31 @@ router.post('/register', (req, res) => {
     }
   });
 
+  router.get('/users/:userId', async (req, res) => {
+    const { userId } = req.params;
+    try {
+      const userResult = await pool.query(
+        'SELECT user_id, email FROM users WHERE user_id = $1',
+        [userId]
+      );
+  
+      const user = userResult.rows[0];
+      // Fetch the user's favorite list_id
+      const listResult = await pool.query(
+        'SELECT favorite_list_id FROM favorite_list WHERE user_id = $1',
+        [userId]
+      );
+      const favorite_list_id = listResult.rows.length > 0 ? listResult.rows[0].favorite_list_id : null;
+
+      return res.json({
+        user_id: user.user_id,
+        email: user.email,
+        favorite_list_id
+      });
+      } catch (error) {
+        console.error('Error fetching user:', error);
+        return res.status(500).json({ error: 'Internal server error' });
+      }
+  });
+
   export default router;

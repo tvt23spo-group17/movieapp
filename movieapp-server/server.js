@@ -10,7 +10,7 @@ import detailRouter from './routes/detailRouter.js';
 import memberRouter from './routes/memberRouter.js';
 import groupRouter from './routes/groupRouter.js';
 import groupMemberRouter from './routes/groupMemberRouter.js'
-
+import favoritesRouter from './routes/favoritesRouter.js';
 
 
 
@@ -40,7 +40,7 @@ app.get('/protected', verifyToken, (req, res) => {
 
 
 
-
+app.use('/', favoritesRouter);
 app.use('/', userRouter);
 app.use('/reviews', reviewRouter);
 app.use('/finnkino', finnkinoRouter);

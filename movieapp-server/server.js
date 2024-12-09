@@ -7,6 +7,7 @@ import userRouter from './routes/userRouter.js';
 import reviewRouter from './routes/reviewRouter.js';
 import finnkinoRouter from './routes/finnkinoRouter.js';
 import detailRouter from './routes/detailRouter.js';
+import favoritesRouter from './routes/favoritesRouter.js';
 
 const app = express();
 app.use(cors());
@@ -23,6 +24,7 @@ app.get('/protected', verifyToken, (req, res) => {
 });
 
 app.use('/', userRouter);
+app.use('/', favoritesRouter);
 app.use('/reviews', reviewRouter);
 app.use('/finnkino', finnkinoRouter);
 app.use('/api', tmdbRouter);

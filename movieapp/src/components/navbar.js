@@ -28,7 +28,7 @@ function Navbar() {
           ) : ( <li><Link to="/LogIn">Log In</Link></li> )}
           <li><Link to="/Register">Register</Link></li>
           <li><Link to="/Account">Account</Link></li>
-          <li><Link to="/Profile">Profile</Link></li>
+          <Link to={`/Profile/${user?.userId || ''}`}>Profile</Link>
           <li><Link to="/GroupManagement">Group Management</Link></li>
         </ul>
       </nav>

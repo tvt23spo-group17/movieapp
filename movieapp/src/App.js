@@ -18,6 +18,8 @@ import Account from './components/Account';
 import Register from './components/Register';
 import GroupPage from './components/GroupPage';
 import GroupManagement from './components/GroupManagement';
+import Profile from './components/Profile';
+import SharedFavorites from './components/SharedFavorites';
 
 function App() {
   return (
@@ -33,6 +35,8 @@ function App() {
           <Route path="/Logout" element={<Logout />} />
           <Route path="/GroupManagement" element={<GroupManagement />} />      
           <Route path="/GroupPage/:id" element={<GroupPage />} />
+          <Route path="/Profile/:userId" element={<Profile />} />
+          <Route path="/share/:favorite_list_id" element={<SharedFavorites />} />
             
           <Route
             path="/Account"

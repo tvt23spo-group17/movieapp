@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const ReviewSection = ({ onClose, reviews }) => {
   return (
@@ -9,7 +10,7 @@ const ReviewSection = ({ onClose, reviews }) => {
         reviews.map((review, index) => (
           <div key={index}>
             <p>
-              <strong>{review.user_email}</strong> ({review.stars} stars):
+              <strong><Link to={`/Profile/${review.user_id}`}>{review.user_email}</Link></strong> ({review.stars} stars):
             </p>
             <p>{review.text}</p>
           </div>

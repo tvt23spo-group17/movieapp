@@ -30,7 +30,7 @@ const FavoritesList = ({ userId, onMovieClick }) => {
               onClick={() => onMovieClick({ id: movie.tmdb_id })}
               style={{ cursor: 'pointer', textDecoration: 'underline' }}
             >
-              {movie.title} (Click to view details)
+              {movie.title}
             </li>
           ))}
         </ul>

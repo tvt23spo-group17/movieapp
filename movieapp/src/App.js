@@ -21,7 +21,9 @@ import GroupManagement from './components/GroupManagement';
 import Profile from './components/Profile';
 import SharedFavorites from './components/SharedFavorites';
 
+
 function App() {
+ 
   return (
       <Router>
         <Navbar />
@@ -33,16 +35,21 @@ function App() {
           <Route path="/Register" element={<Register />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/Logout" element={<Logout />} />
-          <Route path="/GroupManagement" element={<GroupManagement />} />      
-          <Route path="/GroupPage/:id" element={<GroupPage />} />
-          <Route path="/Profile/:userId" element={<Profile />} />
+
+      
+          <Route path="/GroupManagement" element={<PrivateRoute><GroupManagement /></PrivateRoute>} />      
+          <Route path="/GroupManagement/:group_Id" element={<PrivateRoute><GroupPage /></PrivateRoute>} />
+          <Route path="/Profile/:userId" element={<PrivateRoute><Profile /></PrivateRoute>} /> 
+
           <Route path="/share/:favorite_list_id" element={<SharedFavorites />} />
             
+
           <Route
             path="/Account"
             element={
               <PrivateRoute>
                 <Account />
+               
               </PrivateRoute>
             }
           />

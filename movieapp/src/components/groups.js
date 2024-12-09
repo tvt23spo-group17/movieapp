@@ -1,40 +1,67 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import React from 'react';
+import axios from 'axios';
 
 const Groups = () => {
     const [group, setGroup] = useState('')
     const [groups, setGroups] = useState([])
-
-const addGroup = () => {
-    setGroups([...groups,group])
-    setGroup('')
-}
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    
 
 
 
+//tämä valmis
+
+ 
+    const fetchUserGroups = async () => {
+      try {
+        const response = await axios.get('http://localhost:3001/api/groups2');
+        setGroups(response.data);
+        setError(null);
+      } catch (err) {
+        setError('Error no connection');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    useEffect(() => {
+      fetchUserGroups(); 
+  }, []);
+
+
+
+/*
+  const testi = async (requestId) => {
+    try {
+      const response = await axios.post('http://localhost:3001/api/groupstesti');
+      
+      console.log('testii', response.data);
+    } catch (error) {
+      console.error('ei testii', error);
+    }
+  };
+*/
 
 return (
 <div className="groups">
     Groups
 
 <div className="groupList">
-<form>
-<input
-placeholder='Add new group'
-value={group}
-onChange={e => setGroup(e.target.value)}
-onKeyDown={e =>{
-    if (e.key === 'Enter') {
-        e.preventDefault()
-        addGroup()
-    }
-}}
-/>
-</form>
+  {}
+{loading}
+{}
+{error}
 <ul>
-
-</ul>
-
+        {groups.map((group) => (
+          <li key={group.group_id}>
+            <strong>{group.name}</strong> 
+          </li>
+        ))}
+      </ul>
+    
 </div>
 </div>
 )

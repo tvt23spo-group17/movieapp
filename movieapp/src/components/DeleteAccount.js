@@ -8,6 +8,8 @@ function DeleteAccount() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
+
+
   const handleDeleteAccount = async () => {
     if (
       !window.confirm(

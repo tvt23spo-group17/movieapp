@@ -6,6 +6,7 @@ function Navbar() {
   const { user } = useUser();
 
   useEffect(() => {
+    console.log(user);
     console.log('Navbar re-rendered. User state:', user);
   }, [user]);
 
@@ -24,13 +25,20 @@ function Navbar() {
 
           <ul className='navbar-right'>
 
-          {isAuthenticated ? ( <li><Link to="/LogOut">Log Out</Link></li>
-          ) : ( <li><Link to="/LogIn">Log In</Link></li> )}
-          <li><Link to="/Register">Register</Link></li>
-          <li><Link to="/Account">Account</Link></li>
-          <Link to={`/Profile/${user?.userId || ''}`}>Profile</Link>
-          <li><Link to="/GroupManagement">Group Management</Link></li>
-        </ul>
+
+          {isAuthenticated ? (
+    <>
+      <li><Link to="/LogOut">Log Out</Link></li>
+      <li><Link to="/Account">Account</Link></li>
+     <li><Link to={`/Profile/${user?.userId || ''}`}>Profile</Link></li>
+      <li><Link to="/GroupManagement">Group Management</Link></li>
+    </>
+  ) : (
+    <li><Link to="/LogIn">Log In</Link></li>
+  )}
+  <li><Link to="/Register">Register</Link></li>
+</ul>
+
       </nav>
   );
 }

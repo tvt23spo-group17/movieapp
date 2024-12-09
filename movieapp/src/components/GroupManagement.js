@@ -144,7 +144,7 @@ return (
     console.log(item); 
     const requestSent = joinRequestSent[item.id];
     return (
-      <li key={item.id}>
+      <li key={item.group_id}>
         <Link 
           to="#"
           onClick={(e) => {
@@ -155,7 +155,7 @@ return (
           {item.name}
         </Link>
         {user_id === item.creator_user_id ? (
-          <button className="delete-button" onClick={() => deleteGroup(item.id)}>
+          <button className="delete-button" onClick={() => deleteGroup(item.group_id)}>
             Delete
           </button>
         ) : requestSent ? (
@@ -165,7 +165,7 @@ return (
             </button>
           ) :(
               (
-              <button className="join-button" onClick={() => sendJoinRequest(item.id)}>
+              <button className="join-button" onClick={() => sendJoinRequest(item.group_id)}>
                 Join Group
               </button>
           )

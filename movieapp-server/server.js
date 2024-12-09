@@ -6,7 +6,7 @@ import tmdbRouter from './routes/tmdbRouter.js';
 import userRouter from './routes/userRouter.js'
 import reviewRouter from './routes/reviewRouter.js';
 import finnkinoRouter from './routes/finnkinoRouter.js';
-import detailRouter from './routes/detailRouter.js';<<<<<<< Groups
+import detailRouter from './routes/detailRouter.js';
 import memberRouter from './routes/memberRouter.js';
 import groupRouter from './routes/groupRouter.js';
 import groupMemberRouter from './routes/groupMemberRouter.js'
@@ -47,10 +47,10 @@ app.use('/reviews', reviewRouter);
 app.use('/finnkino', finnkinoRouter);
 app.use('/api', tmdbRouter);
 app.use('/details', detailRouter);
-app.use('/member', memberRouter);
-app.use('/api/groups', groupRouter);
-app.use('/api/groups2', groupRouter);
-app.use('/groupMember', groupMemberRouter);
+app.use('/', memberRouter);
+app.use('/', groupRouter);
+app.use('/', groupRouter);
+app.use('/', groupMemberRouter);
 
 
 app.listen(PORT, () => {

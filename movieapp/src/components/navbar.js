@@ -10,7 +10,7 @@ function Navbar() {
     console.log('Navbar re-rendered. User state:', user);
   }, [user]);
 
-  const isAuthenticated = !!user.accessToken;
+  const isAuthenticated = user && !!user.accessToken;
 
   return (
     <nav>
@@ -25,11 +25,12 @@ function Navbar() {
 
           <ul className='navbar-right'>
 
+
           {isAuthenticated ? (
     <>
       <li><Link to="/LogOut">Log Out</Link></li>
       <li><Link to="/Account">Account</Link></li>
-      <li><Link to="/Profile">Profile</Link></li>
+     <li><Link to={`/Profile/${user?.userId || ''}`}>Profile</Link></li>
       <li><Link to="/GroupManagement">Group Management</Link></li>
     </>
   ) : (
@@ -37,6 +38,7 @@ function Navbar() {
   )}
   <li><Link to="/Register">Register</Link></li>
 </ul>
+
       </nav>
   );
 }

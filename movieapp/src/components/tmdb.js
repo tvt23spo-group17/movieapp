@@ -68,6 +68,8 @@ const Tmdb = () => {
     <div className="App">
       <h1>
         {category === 'movies' ? 'Popular Movies'
+          : category === 'movies-trending' ? 'Trending Movies - Today'
+          : category === 'movies-upcoming' ? 'Upcoming Movies'
           : category === 'tv' ? 'Popular TV Shows'
           : category === 'person' ? 'Popular Actors'
           : `Search Results for "${submittedSearchQuery}"`}
@@ -77,10 +79,17 @@ const Tmdb = () => {
         <button
           className={category === 'movies' ? 'active' : ''}
           onClick={() => handleCategoryChange('movies')}
-        >
-          Movies
-        </button>
+        >Popular Movies</button>
         <button
+          className={category === 'movies-trending' ? 'active' : ''}
+          onClick={() => handleCategoryChange('movies-trending')}
+        >Trending Movies</button>
+        <button
+          className={category === 'movies-upcoming' ? 'active' : ''}
+          onClick={() => handleCategoryChange('movies-upcoming')}
+        >Upcoming Movies</button>
+
+        {/*<button
           className={category === 'tv' ? 'active' : ''}
           onClick={() => handleCategoryChange('tv')}
         >
@@ -91,12 +100,12 @@ const Tmdb = () => {
           onClick={() => handleCategoryChange('person')}
         >
           Actors
-        </button>
+        </button>*/}
 
         <form className="search-form" onSubmit={handleSearchSubmit}>
           <input
             type="text"
-            placeholder="Search movies and TV shows"
+            placeholder="Search movies"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -105,7 +114,7 @@ const Tmdb = () => {
       </div>
 
       {selectedItem ? (
-        // Render TmdbDetails when an item is selected
+        // Render TmdbDetails when item is selected
         <TmdbDetails item={selectedItem} onClose={handleCloseDetails} />
       ) : (
         <div className="movie-list">
@@ -114,7 +123,7 @@ const Tmdb = () => {
               <div
                 key={item.id}
                 className="movie-card"
-                onClick={() => handleItemClick(item)} // Handle click event
+                onClick={() => handleItemClick(item)}
               >
                 {(item.poster_path || item.profile_path) && (
                   <img

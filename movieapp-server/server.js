@@ -6,7 +6,7 @@ import tmdbRouter from './routes/tmdbRouter.js';
 import userRouter from './routes/userRouter.js'
 import reviewRouter from './routes/reviewRouter.js';
 import finnkinoRouter from './routes/finnkinoRouter.js';
-import detailRouter from './routes/detailRouter.js';
+import detailRouter from './routes/detailRouter.js';<<<<<<< Groups
 import memberRouter from './routes/memberRouter.js';
 import groupRouter from './routes/groupRouter.js';
 import groupMemberRouter from './routes/groupMemberRouter.js'
@@ -42,6 +42,7 @@ app.get('/protected', verifyToken, (req, res) => {
 
 app.use('/', favoritesRouter);
 app.use('/', userRouter);
+app.use('/', favoritesRouter);
 app.use('/reviews', reviewRouter);
 app.use('/finnkino', finnkinoRouter);
 app.use('/api', tmdbRouter);

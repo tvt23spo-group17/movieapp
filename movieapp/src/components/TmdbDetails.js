@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ReviewForm from './ReviewForm';
 import ReviewSection from './ReviewSection';
+import FavoritesToggle from './FavoritesToggle';
 import { useUser } from '../context/UseUser';
 
 const TmdbDetails = ({ item, onClose, category }) => {
@@ -11,7 +12,9 @@ const TmdbDetails = ({ item, onClose, category }) => {
   useEffect(() => {
     const fetchDetails = async () => {
       try {
-        const itemCategory = item.itemCategory || category;
+        //const itemCategory = item.itemCategory || category;
+        // Hardcoded movie for now
+        const itemCategory = 'movie';
         const response = await fetch(
           `http://localhost:3001/details/${itemCategory}/${item.id}`
         );
@@ -118,7 +121,8 @@ const TmdbDetails = ({ item, onClose, category }) => {
           <p>{details.biography}</p>
         </>
       )}
-      {category !== 'person' && (
+      <FavoritesToggle tmdb_id={item.id} />
+      {(category !== 'person' || 'tv') && (
         <>
           <ReviewSection 
             onClose={onClose}

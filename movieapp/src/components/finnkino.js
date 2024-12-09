@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import React from 'react';
-import ReviewForm from './ReviewForm';
 import MovieDetails from './MovieDetails';
 
 const Finnkino = () => {
@@ -86,8 +85,12 @@ const Finnkino = () => {
         const eventTime = show.getElementsByTagName('dttmShowStart')[0]?.textContent;
         const productionYear = show.getElementsByTagName('ProductionYear')[0]?.textContent;
         const theatreAuditorium = show.getElementsByTagName('TheatreAuditorium')[0]?.textContent;
+        const eventMediumImagePortrait = show.getElementsByTagName('EventMediumImagePortrait')[0]?.textContent;
+        const genres = show.getElementsByTagName('Genres')[0]?.textContent;
+        const presentationMethodAndLanguage = show.getElementsByTagName('PresentationMethodAndLanguage')[0]?.textContent;
+        const ratingImageUrl = show.getElementsByTagName('RatingImageUrl')[0]?.textContent;
 
-        return { title, eventTime, productionYear, eventSmallImagePortrait, theatreAuditorium };
+        return { title, eventTime, productionYear, eventSmallImagePortrait, eventMediumImagePortrait, theatreAuditorium, genres, presentationMethodAndLanguage, ratingImageUrl };
       });
 
       setSchedules(schedulesData);
@@ -123,8 +126,7 @@ const Finnkino = () => {
     try {
       const response = await fetch(
         `http://localhost:3001/api/get-tmdb-id?title=${encodeURIComponent(
-          schedule.title
-        )}&year=${schedule.productionYear}`
+          schedule.title)}&year=${schedule.productionYear}`
       );
       const data = await response.json();
   

@@ -25,8 +25,7 @@ router.get('/member/list/:group_id', async (req, res) => {
     }
   });
 
-//pitää muuttaa että deletoi vaan kylmästi kaikki rejected pois
-  //join request siivous rejected pois
+
   router.delete('/member/:groupId/remove/:requestId', async (req, res) => {
     const { groupId, requestId } = req.params;
     try {
@@ -44,27 +43,40 @@ router.get('/member/list/:group_id', async (req, res) => {
     }
   });
 
-router.post('/member/:groupId/accept/:requestId', async (req, res) => {
-    const { groupId, requestId } = req.params; 
+  router.post('/member/:group_Id/accept/:requestId', async (req, res) => {
+    const { group_Id, requestId } = req.params;
+  console.log("accept access")
     try {
-      const { rows: requestRows } = await db.query(
-        'SELECT * FROM join_request WHERE request_id = $1 AND group_id = $2',
-        [requestId, groupId]
+      const result = await pool.query(
+        `UPDATE join_request
+         SET status = 'accepted'
+         WHERE request_id = $1 AND group_id = $2 AND status = 'pending'
+         RETURNING *`,
+        [requestId, group_Id]
       );
-    if (requestRows.length === 0) {
-        return res.status(404).json({ message: 'no request' });
+  
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: 'Empty request' });
       }
-      const userId = requestRows[0].user_id;
-      const insertResult = await db.query(
-        'INSERT INTO group_members (group_id, user_id, role) VALUES ($1, $2, $3)',
-        [groupId, userId, 'member']
-      );
+      const userId = result.rows[0].user_id;
+      const insertResult = await pool.query(
+        `INSERT INTO group_members (group_id, user_id, role)
+         VALUES ($1, $2, 'member') RETURNING *`,
+        [group_Id, userId]
+ );
+    if (insertResult.rows.length === 0) {
+      return res.status(500).json({ error: 'Failed to add user to group' });
     }
-    catch (error) {
-      console.error('Error accepting request:', error);
-      res.status(500).json({ error: 'internal error' });
-    }
-  });
+    res.json({
+      message: 'Request accepted and user added to group',
+      member: insertResult.rows[0]
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
   
 
 
@@ -87,28 +99,7 @@ router.get('/member/:group_Id/pendingRequests', async (req, res) => {
     }
   });
 
-  router.post('/member/:group_Id/accept/:requestId', async (req, res) => {
-    const { group_Id, requestId } = req.params;
-  
-    try {
-      const result = await pool.query(
-        `UPDATE join_request
-         SET status = 'accepted'
-         WHERE request_id = $1 AND group_id = $2 AND status = 'pending'
-         RETURNING *`,
-        [requestId, group_Id]
-      );
-  
-      if (result.rows.length === 0) {
-        return res.status(404).json({ error: 'Empty request' });
-      }
-  
-      res.json(result.rows[0]); 
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Error' });
-    }
-  });
+
 
 
 

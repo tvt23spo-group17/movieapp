@@ -11,24 +11,45 @@ const router = Router();
 
 
 router.post('/api/groups/', async (req, res) => {
-    console.log('toimii1');
-      const { name, creator_user_id } = req.body;
-      if (!name || !creator_user_id) {
-        console.log(creator_user_id);
-          return res.status(400).json({ error: 'Name and creator_user_id are required' });
-         
-      }
-      try {
-      const query = 'INSERT INTO user_group (name, creator_user_id, created_date) VALUES ($1, $2, NOW()) RETURNING *';
-      const values = [name, creator_user_id];
-      const result = await pool.query(query, values);
-      res.status(201).json({ group: result.rows[0] });
-  } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Group is missing user or name' });
-  }
-  });
-  
+  console.log('toimii1');
+    const { name, creator_user_id } = req.body;
+    if (!name || !creator_user_id) {
+      console.log(creator_user_id);
+        return res.status(400).json({ error: 'Name and creator_user_id are required' });
+       
+    }
+    try {
+    const query = 'INSERT INTO user_group (name, creator_user_id, created_date) VALUES ($1, $2, NOW()) RETURNING *';
+    const values = [name, creator_user_id];
+    const result = await pool.query(query, values);
+    const group = result.rows[0];
+   // console.log('katkaisu')
+//console.log(result)
+    const groupId = group.group_id;  
+    const userId = creator_user_id;
+    const role = 'owner';
+
+    const memberQuery = 'INSERT INTO group_members (group_id, user_id, role) VALUES ($1, $2, $3) RETURNING *';
+    const memberValues = [groupId, userId, role];
+    const memberResult = await pool.query(memberQuery, memberValues);
+ //   console.log(result)
+  //  console.log(memberResult)
+  /*  res.status(201).json({
+      group: group,
+      member: memberResult.rows[0]
+    }); */
+   
+    res.status(201).json({ group: result.rows[0] });
+} catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Group is missing user or name' });
+}
+
+});
+
+
+
+
   router.delete('/api/groups/:id', async (req, res) => {
       const { id } = req.params;
       try {

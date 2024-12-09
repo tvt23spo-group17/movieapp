@@ -5,7 +5,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useUser } from '../context/UseUser';
 import './GroupPage.css';
-
+import { useContext } from 'react';
 
 const url = 'http://localhost:3001'
 
@@ -15,13 +15,15 @@ const group_id = group_Id
 
   const [member, setMember] = useState('')
   const [members, setMembers] = useState([])
-  const [userId, setUserId] = useState();
+  //const [userId, setUserId] = useState();
   const [pendingRequests, setPendingRequests] = useState([]);
   const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const { user } = useUser();
+    const user_id = user.userId; //user.userId
     
-//tämäkin täytyy olla sisäänkirjautumisen takana
-console.log('Request URL:', url + `/api/member/${group_Id}/pendingRequests`);
+
+
 
   useEffect(() => {
     
@@ -30,12 +32,15 @@ console.log('Request URL:', url + `/api/member/${group_Id}/pendingRequests`);
 
   }, []);
 
+
+  
   const fetchMembers = async (group_id) => {
     try {
      
-      const response = await axios.get(`http://localhost:3001/member/list/${group_id}`);
+      const response = await axios.get(url + `/member/list/${group_id}`);
       setMembers(response.data);
       console.log(response)
+      console.log("members update")
       setError(null);
     } catch (err) {
       setError('Error no connection');
@@ -95,6 +100,7 @@ const addMember = async (requestId) => {
   } catch (error) {
     console.error('Error joining:', error);
   }
+
 };
     
 
@@ -110,7 +116,21 @@ const deleteMember = (requestId) => {
     })
    
 }
-//USER LEAVE GROUP !!!!!
+
+const leaveGroup = (group_id) => {
+        
+  console.log(group_id);
+  axios.post(url + `/groupMember/${group_id}/leave`, {
+    user_id: user_id
+})
+.then(response => {
+    alert('Leave group'); //tämä varmaan pois kun törkeen näkönen
+   
+})
+.catch(error => {
+    alert(error.response?.data.error ? error.response.data.error : error.message);
+});
+} 
 
   return (
     <div className="Group-page">
@@ -121,7 +141,7 @@ const deleteMember = (requestId) => {
   {members.length > 0 ? (
     members.map((member) => (
       <li key={member.group_id}>
-        <strong>{member.name}</strong>
+        <strong>{member.user_id}</strong>
       </li>
     ))
   ) : (
@@ -137,13 +157,19 @@ const deleteMember = (requestId) => {
         <p>{request.user_id} has requested to join the group</p>
         <button onClick={() => addMember(request.request_id)}>Add member</button>
         <button onClick={() => rejectMember(request.request_id)}>Decline member</button>
-
+        
       </li>
     ))
   ) : (
-    <p>No pending requests.</p>
+    <p>No member requests.</p>
   )}
 </ul>
+<ul>
+<button onClick={() => leaveGroup(group_id)}>Leave Group</button>
+
+</ul>
+
+
     </div>
   );
 };

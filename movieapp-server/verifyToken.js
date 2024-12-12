@@ -9,7 +9,6 @@ function verifyToken(req, res, next) {
           console.error('Token verification error:', err);
           return res.status(403).json({ message: 'Invalid token' });
         } else {
-          console.log('Decoded token:', decoded);
           req.user = decoded;
           next();
         }

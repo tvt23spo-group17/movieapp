@@ -13,11 +13,9 @@ router.post('/token', async (req, res) => {
   if (!token) {
     return res.status(401).json({ message: 'Refresh token is required' });
   }
-
   try {
     // Hash the provided refresh token
     const hash = crypto.createHash('sha256').update(token).digest('hex');
-
     // Check if hashed token exists in the database and is not expired
     const result = await pool.query(
       'SELECT * FROM refresh_tokens WHERE token = $1 AND expiration_date > NOW()',
@@ -27,14 +25,12 @@ router.post('/token', async (req, res) => {
     if (result.rows.length === 0) {
       return res.status(403).json({ message: 'Invalid or expired refresh token' });
     }
-
     // Verify the refresh token
     jwt.verify(token, process.env.JWT_REFRESH_SECRET, (err, decoded) => {
       if (err) {
         console.error('Refresh token verification error:', err);
         return res.status(403).json({ message: 'Invalid refresh token' });
       }
-
       const userId = decoded.id;
       const email = decoded.email;
 
@@ -44,7 +40,6 @@ router.post('/token', async (req, res) => {
         process.env.JWT_SECRET,
         { expiresIn: '15m' }
       );
-
       res.json({ accessToken });
     });
   } catch (err) {
@@ -94,14 +89,11 @@ router.post('/register', (req, res) => {
   router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     try {
-      // Fetch user from the database
       const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
       if (result.rows.length === 0) {
         return res.status(400).json({ message: 'Invalid email or password' });
       }
       const user = result.rows[0];
-      console.log('User from database:', user);
-  
       // Compare the provided password with the stored hashed password
       const passwordMatch = bcryptjs.compareSync(password, user.password);
       if (!passwordMatch) {
@@ -109,14 +101,12 @@ router.post('/register', (req, res) => {
       }
   
       const userId = user.user_id;
-  
       // Create JWT access token (expires in 15 minutes)
       const accessToken = jwt.sign(
         { id: userId, email: user.email },
         process.env.JWT_SECRET,
         { expiresIn: '15m' }
       );
-  
       // Create JWT refresh token (expires in 7 days)
       const refreshToken = jwt.sign(
         { id: userId, email: user.email },
@@ -195,7 +185,6 @@ router.post('/register', (req, res) => {
       );
   
       const user = userResult.rows[0];
-      // Fetch the user's favorite list_id
       const listResult = await pool.query(
         'SELECT favorite_list_id FROM favorite_list WHERE user_id = $1',
         [userId]

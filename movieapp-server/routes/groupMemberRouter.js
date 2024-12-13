@@ -74,6 +74,74 @@ router.get('/groupMember/:group_id/members/:user_id', async (req, res) => {
     }
   });
 
+  router.post('/groupMember/movie_sched/:user_id', async (req, res) => {
+    //const { group_id } = req.params;
+    const { user_id } = req.params;
+    const { local_title } = req.body;
+    const { show_time } = req.body;
+    try {
+      const query = 'INSERT INTO group_movie (user_id, local_title, show_time) VALUES ($1, $2, $3) RETURNING *';
+      const result = await pool.query(query, [user_id, local_title, show_time]);
+     
+  
+      res.json(result.rows);
+    } catch (error) {
+      console.error('error', error);
+      res.status(500).json({ error: 'error' });
+    }
+  });
+  
+  
+  router.get('/groupMember/movie_sched/', async (req, res) => {
+    const { user_id } = req.query;
+  console.log('toimiiko lehvahaku')
+    try {
+      const result = await pool.query(
+        'SELECT local_title, show_time FROM group_movie WHERE user_id = $1', 
+  [user_id]);
+  console.log(result)
+      res.json(result.rows);
+  
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Error fetching movie showtimes' });
+    }
+  });
+  
+  
+  router.post('/groupMember/movie_sched/', async (req, res) => {
+    //const { group_id } = req.params;
+    const { group_id, local_title, show_time } = req.body;
+    try {
+      const query = `
+      INSERT INTO group_movie (group_id, local_title, show_time) 
+      VALUES ($1, $2, $3) 
+      RETURNING *`;
+  
+      const result = await pool.query(query, [group_id, local_title, show_time]);
+      //res.json(result.rows[0]);
+    } catch (error) {
+      console.error('error', error);
+      res.status(500).json({ error: 'error' });
+    }
+  });
+  
+  
+  router.get('/groupMember/movie_sched2/:group_id', async (req, res) => {
+    const { group_id } = req.params;
+  console.log('toimiiko lehvahaku')
+    try {
+      const result = await pool.query(
+        'SELECT local_title, show_time FROM group_movie WHERE group_id = $1', 
+  [group_id]);
+  console.log(result)
+      res.json(result.rows);
+  
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Error fetching movie showtimes' });
+    }
+  });
 
 
 export default router;

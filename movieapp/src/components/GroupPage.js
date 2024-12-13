@@ -21,22 +21,26 @@ const group_id = group_Id
     const [error, setError] = useState(null);
     const { user } = useUser();
     const user_id = user.userId; //user.userId
-    
-
-
+    const [groupMovie, setGroupMovie] = useState('')
+    const [groupMovies, setGroupMovies] = useState([])
+    const [selectedMovie, setSelectedMovie] = useState('');
+    const [groupMovies2, setGroupMovies2] = useState([])
+    const [groupMovie2, setGroupMovie2] = useState('')
+    const [movieShowtimes, setMovieShowtimes] = useState([]);
 
   useEffect(() => {
+   // console.log(group_Id, 'alku')
     
-
     updateMembers();
 
   }, []);
 
 
+
   
   const fetchMembers = async (group_id) => {
     try {
-     
+    
       const response = await axios.get(url + `/member/list/${group_id}`);
       setMembers(response.data);
       console.log(response)
@@ -48,7 +52,11 @@ const group_id = group_Id
     } finally {
       setLoading(false);
     }
+    showListGroupPageMovie(group_id);
   };
+
+
+
   const updateMembers = async () => {
     try {
     
@@ -62,9 +70,11 @@ const group_id = group_Id
          console.log(`Request ${request.request_id} accepted and member added`);
         }
       }
-
+      handleGroupPageMovie();
       fetchMembers(group_id);
+    
       fetchPendingRequests();
+    
     } catch (error) {
       console.error('Error updating member statuses:', error);
     }
@@ -106,7 +116,7 @@ const addMember = async (requestId) => {
 
 
 const deleteMember = (requestId) => {
-  console.log(requestId)
+ // console.log(requestId)
     axios.delete(url + '/member/' + requestId)
     .then(response => {
         const withoutRemoved = members.filter((item) => item.requestId !== requestId)
@@ -117,9 +127,85 @@ const deleteMember = (requestId) => {
    
 }
 
-const leaveGroup = (group_id) => {
-        
-  console.log(group_id);
+const handleGroupPageMovie = (user) => {
+  
+//console.log(user_id)
+//console.log("toimiiko lehvahaku")
+
+axios.get(url + "/groupMember/movie_sched/", {
+  params: { user_id: user_id }
+} )
+.then(response => {
+  const newMovies = response.data.map(movie => ({
+    local_title: movie.local_title,
+    show_time: movie.show_time,
+  }));
+
+  setGroupMovies(prevGroupMovies => [...prevGroupMovies, ...newMovies]);
+  setGroupMovie(''); 
+
+})
+}
+
+
+const handleGroupMovieShow = () => {
+ // console.log(group_id)
+
+  if (!selectedMovie) {
+    alert("Please select a movie first!");
+    return;
+  }
+  const selectedMovieDetails = groupMovies.find(movie => movie.local_title === selectedMovie);
+ 
+  axios.post(`http://localhost:3001/groupMember/movie_sched/`,{
+    group_id: group_id,
+    local_title: selectedMovieDetails.local_title,
+    show_time: selectedMovieDetails.show_time,
+  
+  })
+    .then(response => {
+      setGroupMovies2(...groupMovies2, {id: response.data.groupMovie2.group_id, name: groupMovie2});
+      setGroupMovie2('')
+      })
+  .catch(error =>{
+      //  console.log(error.response)
+        })
+  }
+
+
+const showListGroupPageMovie = async (group_id) => {
+  console.log(group_id)
+  console.log("updatee näytös")
+  
+    axios.get(url + `/groupMember/movie_sched2/${group_id}`, {
+      //params: { group_id: group_id }
+    } )
+    .then(response => {
+      console.log(response)
+      const data = response.data;
+      setMovieShowtimes(data);
+      
+    }).catch(error => {
+      console.error("Error fetching movies for the group:", error);
+    });
+}
+
+
+
+
+
+
+
+
+const leaveGroup = (group_id, creator_user_id, user_id) => {
+        //const creator_user_id = group_id.creator_user_id
+        console.log(user_id)
+        console.log(creator_user_id)
+ // console.log(group_id);
+ if (user_id === creator_user_id) {
+  alert('Owner cannot leave group');
+  return; 
+}
   axios.post(url + `/groupMember/${group_id}/leave`, {
     user_id: user_id
 })
@@ -164,6 +250,42 @@ const leaveGroup = (group_id) => {
     <p>No member requests.</p>
   )}
 </ul>
+
+<div className="groupMovies"></div>
+
+<h4>Näytösaikoja</h4>
+
+        <select value={selectedMovie}
+        onChange={(e) => setSelectedMovie(e.target.value)}>
+          <option value="">Valitse näytösaika</option>
+          {groupMovies.length > 0 ? (
+            groupMovies.map((groupMovie, index) => (
+              <option
+                key={groupMovie.local_title + groupMovie.show_time + index}
+                value={groupMovie.local_title}
+              >
+                {groupMovie.local_title} ({groupMovie.show_time})
+              </option>
+            ))
+          ) : (
+            <option>No movies available</option>
+          )}
+        </select>
+        <button onClick={handleGroupMovieShow}>Talleta näytösaika ryhmälle</button>
+        <div>
+        <ul>
+        {movieShowtimes.length > 0 ? (
+            movieShowtimes.map((movie, index) => (
+              <li key={index}>
+                {movie.local_title} - {new Date(movie.show_time).toLocaleString()}
+              </li>
+            ))
+          ) : (
+            <li>No movie showtimes available.</li>
+          )}
+        </ul>
+        </div>
+
 <ul>
 <button onClick={() => leaveGroup(group_id)}>Leave Group</button>
 

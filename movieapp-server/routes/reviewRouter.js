@@ -27,7 +27,7 @@ router.get('/get-reviews', async (req, res) => {
   
     try {
       const reviewsResult = await pool.query(
-        'SELECT r.text, r.stars, r.timestamp, u.email AS user_email, u.user_id FROM review r JOIN users u ON r.user_id = u.user_id WHERE r.tmdb_id = $1',
+        'SELECT r.text, r.stars, r.timestamp, u.email AS user_email FROM review r JOIN users u ON r.user_id = u.user_id WHERE r.tmdb_id = $1',
         [tmdb_id]
       );
   

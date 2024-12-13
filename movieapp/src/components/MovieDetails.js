@@ -4,6 +4,7 @@ import ReviewForm from './ReviewForm';
 import ReviewSection from './ReviewSection';
 import { useUser } from '../context/UseUser';
 import FavoritesToggle from './FavoritesToggle';
+import axios from 'axios';
 
 const MovieDetails = ({
   selectedMovie,
@@ -12,11 +13,31 @@ const MovieDetails = ({
   fetchReviews
 }) => {
   const { user } = useUser();
+  const user_id = user.userId
   const handleReviewSubmitted = () => {
     fetchReviews(selectedMovie.tmdb_id);
   };
   const eventDate = new Date(selectedMovie.eventTime);
   const formattedEventTime = eventDate.toLocaleString('fi-FI');
+
+const handleGroupMovie = (user) => {
+  //console.log('onnistui')
+  //console.log(`Saving showtime for movie: ${selectedMovie.eventTime}`)
+ 
+  //console.log(user_id)
+ axios.post(`http://localhost:3001/groupMember/movie_sched/${user_id}`,{
+  local_title: selectedMovie.title,
+  show_time: selectedMovie.eventTime
+  
+})
+  .then(response => {
+    
+    }).catch(error =>{
+      console.log(error.response)
+      })
+
+} 
+
 
   return (
     <div className="finnkino-details">
@@ -34,6 +55,7 @@ const MovieDetails = ({
         {user && selectedMovie.tmdb_id && (
           <FavoritesToggle tmdb_id={selectedMovie.tmdb_id} />
         )}
+        <button onClick={handleGroupMovie}>Talleta näytösaika</button>
         <ReviewSection
           onClose={() => setShowReviewModal(false)}
           setShowReviewModal={setShowReviewModal}

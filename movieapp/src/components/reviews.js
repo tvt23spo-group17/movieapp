@@ -38,8 +38,8 @@ const Reviews = () => {
 
 
     return (
-        <div>
-          <h2>All Reviews</h2>
+        <div className='container-sm'>
+          <h1>All Reviews</h1>
           {selectedItem ? (
             // If an item is selected, show TmdbDetails
             <TmdbDetails
@@ -49,14 +49,14 @@ const Reviews = () => {
             />
           ) : (
             // Otherwise, show the list of reviews
-            <ul className="review-list">
+            <ul className="list-group">
               {reviews.map((review) => (
-                <li
+                <li className="list-group-item"
                   key={review.review_id}
                   onClick={() => handleReviewClick(review)}
                   style={{ cursor: 'pointer' }}
                 >
-                  <p><strong>{review.local_title}</strong></p>
+                  <h4>{review.local_title}</h4>
                   <p>Review: {review.text}</p>
                   <p>Stars: {review.stars}</p>
                   <p>By: {review.email}</p>

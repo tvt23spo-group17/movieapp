@@ -133,14 +133,14 @@ const leaveGroup = (group_id) => {
 } 
 
   return (
-    <div className="Group-page">
-      Add new members
+    <div className="Group-page container-sm">
+      <h1 className="mb-3">Group Page</h1>
       <div className="Memberlist"></div>
-      <ul>
+      <ul className="list-group">
   <h3>Members</h3>
   {members.length > 0 ? (
     members.map((member) => (
-      <li key={member.group_id}>
+      <li className="list-group-item" key={member.group_id}>
         <strong>{member.user_id}</strong>
       </li>
     ))
@@ -149,28 +149,30 @@ const leaveGroup = (group_id) => {
   )}
 </ul>
 
-<ul>
-  <h3>Pending Requests</h3>
+<ul className="list-group">
+  <h3 className="mt-3 mb-3">Pending Requests</h3>
+  <div className="row">
   {pendingRequests.length > 0 ? (
     pendingRequests.map((request) => (
-      <li key={request.request_id}>
-        <p>{request.user_id} has requested to join the group</p>
-        <button onClick={() => addMember(request.request_id)}>Add member</button>
-        <button onClick={() => rejectMember(request.request_id)}>Decline member</button>
-        
+      <div className="col-12 mb-2" key={request.request_id}>
+      <li className="list-group-item flex-grow-1 mb-0">
+        {request.user_id} {" has requested to join the group"}
       </li>
+      <div className="d-flex justify-content-start mt-2">
+      <button className="btn btn-primary btn-sm me-2" onClick={() => addMember(request.request_id)}>Add member</button>
+      <button className="btn btn-danger btn-sm me-2" onClick={() => rejectMember(request.request_id)}>Decline member</button>
+      </div>
+      </div>
     ))
   ) : (
     <p>No member requests.</p>
   )}
+</div>
 </ul>
-<ul>
-<button onClick={() => leaveGroup(group_id)}>Leave Group</button>
-
-</ul>
+<button className="btn btn-danger mt-5" onClick={() => leaveGroup(group_id)}>Leave Group</button>
+</div>
 
 
-    </div>
   );
 };
 

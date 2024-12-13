@@ -46,17 +46,17 @@ const Groups = () => {
 */
 
 return (
-<div className="groups">
-    Groups
+<div className="groups container-sm">
+    <h1 className="mb-3">Groups</h1>
 
 <div className="groupList">
   {}
 {loading}
 {}
 {error}
-<ul>
+<ul className="list-group">
         {groups.map((group) => (
-          <li key={group.group_id}>
+          <li className="list-group-item" key={group.group_id}>
             <strong>{group.name}</strong> 
           </li>
         ))}

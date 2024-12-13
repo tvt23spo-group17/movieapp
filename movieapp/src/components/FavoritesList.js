@@ -19,13 +19,13 @@ const FavoritesList = ({ userId, onMovieClick }) => {
 
   return (
     <div className="favorites-list">
-      <h2>Favorite Movies</h2>
+      <h3>Favorite Movies</h3>
       {movies.length === 0 ? (
-        <p>No public favorite movies found for this user.</p>
+        <p>No favorite movies found for this user.</p>
       ) : (
-        <ul>
+        <ul className="list-group">
           {movies.map((movie) => (
-            <li 
+            <li className="list-group-item link-light link-offset-2"
               key={movie.tmdb_id} 
               onClick={() => onMovieClick({ id: movie.tmdb_id })}
               style={{ cursor: 'pointer', textDecoration: 'underline' }}

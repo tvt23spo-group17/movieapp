@@ -40,10 +40,11 @@ const ReviewForm = ({ tmdb_id, onReviewSubmitted }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>Stars:</label>
+    <form  className='form mt-4' onSubmit={handleSubmit}>
+      <div className="form-floating mb-3">
         <select
+          className='form-select'
+          id='stars'
           value={stars}
           onChange={(e) => setStars(parseInt(e.target.value))}
         >
@@ -53,16 +54,20 @@ const ReviewForm = ({ tmdb_id, onReviewSubmitted }) => {
             </option>
           ))}
         </select>
+        <label htmlFor='stars'>Stars</label>
       </div>
-      <div>
-        <label>Review:</label>
+      <div className="form-floating mb-3">
         <textarea
+          className="form-control"
+          id="floatingReview"
+          placeholder="Review"
           value={text}
           onChange={(e) => setText(e.target.value)}
           required
         />
+        <label htmlFor="floatingReview">Review</label>
       </div>
-      <button type="submit">Submit Review</button>
+      <button type="submit" className='btn btn-secondary'>Submit Review</button>
     </form>
   );
 };

@@ -39,26 +39,28 @@ const Profile = () => {
   const { email, favorite_list_id } = userInfo;
 
   return (
-    <div className="profile-page">
-      <h1>Profile</h1>
+    <div className="profile-page container-sm">
+      <h1 className="mb-3">Profile</h1>
       {userInfo ? (
         <>
           <p>Profile page of the user:{' '}<strong>{email}</strong></p>
         </>
       ) : ( <p>No information found</p> )}
 
-      <FavoritesList userId={userId} onMovieClick={handleMovieClick} />
-
-      {selectedMovie && (
-        <div className="modal">
+      {!selectedMovie ? (
+        <>      
+        <FavoritesList userId={userId} onMovieClick={handleMovieClick} />
+        <p>Share a link to the favorite movies list:</p>
+        <a href={`http://localhost:3000/share/${favorite_list_id}`}>Click here to open</a>
+        </>
+      ) : (
+        <>
           <TmdbDetails 
             item={selectedMovie} 
             onClose={handleCloseDetails}
           />
-        </div>
+        </>
       )}
-      <p>Share a link to your favorites list:</p>
-      <a href={`http://localhost:3000/share/${favorite_list_id}`}>Click here to open</a>
     </div>
   );
 };

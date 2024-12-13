@@ -21,19 +21,19 @@ const MovieDetails = ({
   return (
     <div className="finnkino-details">
       <div className="modal-content">
-        <h2>
+        <h2 className='text-center'>
           {selectedMovie.title}{' '}
           {selectedMovie.productionYear
             ? `(${selectedMovie.productionYear})`
             : ''}
         </h2>
+        {user && selectedMovie.tmdb_id && (
+          <FavoritesToggle tmdb_id={selectedMovie.tmdb_id} />
+        )}
         <img src={selectedMovie.eventMediumImagePortrait} alt={selectedMovie.title} />
         <p>{selectedMovie.genres}<img className='rating-img' src={selectedMovie.ratingImageUrl} /></p>
         <p>{selectedMovie.presentationMethodAndLanguage}</p>
         <p>{formattedEventTime}{' '}{selectedMovie.theatreAuditorium}</p>
-        {user && selectedMovie.tmdb_id && (
-          <FavoritesToggle tmdb_id={selectedMovie.tmdb_id} />
-        )}
         <ReviewSection
           onClose={() => setShowReviewModal(false)}
           setShowReviewModal={setShowReviewModal}

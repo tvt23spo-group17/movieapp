@@ -9,8 +9,8 @@ This repository contains the **MovieApp**, which is divided into two main folder
 ## Resources
 
 - **Database Diagram**: ![Database Diagram](./dbdiagram.png)
-- **UI Design**: [Figma or design tool link](#)
-- **Work Hours**: [[Work Hours Documentation](https://unioulu-my.sharepoint.com/:x:/g/personal/t3joal00_students_oamk_fi/Ea04_oaZPPpHoPMoM6HTn4kBliY2F3vXSMCTcVKl_vgSGw?e=BX3RDS)
+- **UI Design**: [Moqups](https://app.moqups.com/O3n32wjqkYpdSJPYaJmG19BZjCfP7MHH/view/page/ad64222d5)
+- **Work Hours**: [Work Hours Documentation](https://unioulu-my.sharepoint.com/:x:/g/personal/t3joal00_students_oamk_fi/Ea04_oaZPPpHoPMoM6HTn4kBliY2F3vXSMCTcVKl_vgSGw?e=BX3RDS)
 ---
 
 ## Setup and Run

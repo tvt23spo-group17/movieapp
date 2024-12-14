@@ -6,6 +6,12 @@ This repository contains the **MovieApp**, which is divided into two main folder
 2. **movieapp-server**: Backend of the application (Node.js with Express).
 
 ---
+## Resources
+
+- **Database Diagram**: ![Database Diagram](./path-to-diagram/db-diagram.png)
+- **UI Design**: [Figma or design tool link](#)
+- **Work Hours**: [Work Hours Documentation](#)
+---
 
 ## Setup and Run
 
@@ -142,11 +148,4 @@ To run the tests for the backend:
 npm test
 ```
 
----
-
-## Additional Resources
-
-- **Database Diagram**: ![Database Diagram](./path-to-diagram/db-diagram.png)
-- **UI Design**: [Figma or design tool link](#)
-- **Work Hours**: [Work Hours Documentation](#)
 

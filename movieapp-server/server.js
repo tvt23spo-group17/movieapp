@@ -42,7 +42,6 @@ app.get('/protected', verifyToken, (req, res) => {
 
 app.use('/', favoritesRouter);
 app.use('/', userRouter);
-app.use('/', favoritesRouter);
 app.use('/reviews', reviewRouter);
 app.use('/finnkino', finnkinoRouter);
 app.use('/api', tmdbRouter);

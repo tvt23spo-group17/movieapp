@@ -95,6 +95,7 @@ const Finnkino = () => {
 
       setSchedules(schedulesData);
       console.log(schedulesData);
+      
       setLoading(false);
     } catch (error) {
       console.error('Error fetching schedule', error);
@@ -121,7 +122,7 @@ const Finnkino = () => {
   const handleReviewClick = async (schedule) => {
     setSelectedMovie(schedule);
     setShowReviewModal(true);
-  
+  console.log('schedule')
     // Fetch TMDB ID
     try {
       const response = await fetch(
@@ -215,6 +216,7 @@ const Finnkino = () => {
       <div className='col-6'>
       {showReviewModal && selectedMovie && (
         <MovieDetails
+       
           selectedMovie={selectedMovie}
           setShowReviewModal={setShowReviewModal}
           reviews={reviews}

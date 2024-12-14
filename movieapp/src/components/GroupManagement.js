@@ -88,7 +88,12 @@ const handleGroupClick = async (group_id) => {
     }
   };
 
+
+
+
+
 const deleteGroup = (group_id) => {
+  console.log(group_id)
     axios.delete(url + '/api/groups/' + group_id)
     .then(response => {
         const withoutRemoved = groups.filter((item) => item.group_id !== group_id)
@@ -142,7 +147,7 @@ return (
         <ul>
         {groups.map(item => {
     console.log(item); 
-    const requestSent = joinRequestSent[item.id];
+    const requestSent = joinRequestSent[item.group_id];
     return (
       <li key={item.group_id}>
         <Link 

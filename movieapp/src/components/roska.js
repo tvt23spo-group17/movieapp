@@ -53,3 +53,25 @@ const memberStatus = () => {
     
 };
 */
+
+
+/* tämä siirtyy sinne mistä elokuva aika tarkoitus siirtää groupPageen
+const sendMovieGroup = async () => {
+   
+axios.post(url + `/groupMember/movie_sched/${user_id}`,{
+      local_title: local_title,
+      show_Time: show_Time
+})
+      .then(response => {
+        setMovieSchedGroup()
+        }).catch(error =>{
+          console.log(error.response)
+          })
+        }
+
+*/
+
+
+
+
+

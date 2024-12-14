@@ -15,12 +15,12 @@ function Navbar() {
   return (
     <nav>
         <ul className='navbar'>
-          
+  
           <li><Link to="/finnkino">Finnkino</Link></li>
           <li><Link to="/Reviews">Reviews</Link></li>
           <li><Link to="/Tmdb">Tmdb</Link></li>
           <li><Link to="/Groups">Groups</Link></li>
-          
+          <li><Link to={`/Profile/${user?.userId || ''}`}>Profile</Link></li>
           </ul>
 
           <ul className='navbar-right'>
@@ -30,7 +30,7 @@ function Navbar() {
     <>
       <li><Link to="/LogOut">Log Out</Link></li>
       <li><Link to="/Account">Account</Link></li>
-     <li><Link to={`/Profile/${user?.userId || ''}`}>Profile</Link></li>
+     
       <li><Link to="/GroupManagement">Group Management</Link></li>
     </>
   ) : (

@@ -56,7 +56,7 @@ const FavoritesToggle = ({ tmdb_id }) => {
   }
 
   return (
-    <button onClick={handleToggleFavorite}>
+    <button type='button' className='btn btn-secondary mb-2' onClick={handleToggleFavorite}>
       {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
     </button>
   );

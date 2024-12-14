@@ -3,62 +3,15 @@
     padding: 20px;
     font-family: 'Roboto', sans-serif;
   }
-  
-
-
-  .navigation {
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-  
-  .movie-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  
-  .movie-card {
-    width: 250px;
-    margin: 15px;
-    text-align: left;
-    background-color: #f0f0f0;
-    padding: 10px;
-  }
-  
-  .movie-card img {
-    width: 100%;
-  }
-  
-  .movie-card h2 {
-    font-size: 1.2em;
-    margin: 10px 0;
-  }
-  
-  .movie-card p {
-    font-size: 0.9em;
-    color: #333;
-  }
-  
-  .logout-button {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-  }
-  .movie-details {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
-    width: 40%;
-  }
   .finnkino-details {
-    width: 320px;
+    max-width: 320px;
+  }
+  .finnkino-details img {
+    max-width: 320px;
+    margin-bottom: 1rem;
   }
   .finnkino-item {
-    margin-top: 10px;
+    margin-bottom: 1.5rem;
     display: flex;
     align-items: center;
   }
@@ -70,23 +23,24 @@
     flex-direction: column;
   }
   .finnkino-details {
-      position: fixed;
-      top: 50px;
-      left: 40%;
-      background-color: white;
+      position: sticky;
       z-index: 1000;
     }
-  .review-list {
-    list-style-type: none;
-  }
-  .review-list li {
-    margin-top: 30px;
-  }
-  .review-list li p {
-    margin: 5px 0 5px 0;
-  }
   .rating-img {
     width: auto;
     height: 24px;
     float: right;
+  }
+  .movie-details {
+    max-width: 400px;
+  }
+  .delete-account {
+    max-width: 400px;
+  }
+  .login-form {
+    max-width: 600px;
+    top: 50%;
+  }
+  .register-form {
+    max-width: 600px;
   }

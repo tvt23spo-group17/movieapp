@@ -33,16 +33,20 @@ function DeleteAccount() {
   };
 
   return (
-    <div>
+      <form className="delete-account form">
+      <p>Delete your account and all related information</p>
+      <div className="input-group">
       <input
+        className="form-control"
         type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Confirm Password"
         required
       />
-      <button onClick={handleDeleteAccount}>Delete Account</button>
-    </div>
+      <button className="btn btn-danger"onClick={handleDeleteAccount}>Delete Account</button>
+      </div>
+      </form>
   );
 }
 

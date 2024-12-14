@@ -88,12 +88,13 @@ const TmdbDetails = ({ item, onClose, category }) => {
   }
 
   return (
-    <div className="movie-details">
-      <button className="close-button" onClick={onClose}>
+    <div className="movie-details container-sm justify-content-center">
+      <FavoritesToggle tmdb_id={item.id} />
+      {/*<button className="btn btn-dark" onClick={onClose}>
         Close
-      </button>
+      </button>*/}
       {(details.poster_path || details.profile_path) && (
-        <img
+        <img className="mb-3"
           src={`https://image.tmdb.org/t/p/w300${
             details.poster_path || details.profile_path
           }`}
@@ -121,7 +122,6 @@ const TmdbDetails = ({ item, onClose, category }) => {
           <p>{details.biography}</p>
         </>
       )}
-      <FavoritesToggle tmdb_id={item.id} />
       {(category !== 'person' || 'tv') && (
         <>
           <ReviewSection 

@@ -128,11 +128,14 @@ const sendJoinRequest = (group_id) => {
   
 
 return (
-    <div className="groups">
-      <h2>Groups</h2>
+    <div className="groups container-sm">
+      <h1>Groups</h1>
       <div className="groupList">
+      <div className="input-group mb-3">
         <form>
           <input
+            type="text"
+            className="form-control"
             placeholder="Add new group"
             value={group}
             onChange={(e) => setGroup(e.target.value)}
@@ -144,13 +147,17 @@ return (
             }}
           />
         </form>
-        <ul>
+      </div>
+        <ul className="list-group">
         {groups.map(item => {
     console.log(item); 
     const requestSent = joinRequestSent[item.group_id];
     return (
-      <li key={item.group_id}>
-        <Link 
+      <div className="d-flex mb-2 input-group row" key={item.group_id}>
+      <div className="col-10">
+      <li className="list-group-item flex-grow-1 form-control">
+        <strong>
+        <Link className="link-offset-2 link-light"
           to="#"
           onClick={(e) => {
             e.preventDefault();
@@ -159,23 +166,26 @@ return (
         >
           {item.name}
         </Link>
+        </strong>
+      </li>
+      </div>
         {user_id === item.creator_user_id ? (
-          <button className="delete-button" onClick={() => deleteGroup(item.group_id)}>
+          <button className="delete-button btn btn-danger form-control" onClick={() => deleteGroup(item.group_id)}>
             Delete
           </button>
         ) : requestSent ? (
             
-            <button disabled>
-              Join Request Sent
+            <button disabled className="btn btn-secondary form-control">
+              Request Sent
             </button>
           ) :(
               (
-              <button className="join-button" onClick={() => sendJoinRequest(item.group_id)}>
+              <button className="join-button btn btn-primary form-control " onClick={() => sendJoinRequest(item.group_id)}>
                 Join Group
               </button>
           )
         )}
-      </li>
+      </div>
     );
   })}
         </ul>

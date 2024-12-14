@@ -65,8 +65,8 @@ const Tmdb = () => {
   };
 
   return (
-    <div className="App">
-      <h1>
+    <div className="container-sm">
+      <h1 className='mb-3'>
         {category === 'movies' ? 'Popular Movies'
           : category === 'movies-trending' ? 'Trending Movies - Today'
           : category === 'movies-upcoming' ? 'Upcoming Movies'
@@ -75,17 +75,18 @@ const Tmdb = () => {
           : `Search Results for "${submittedSearchQuery}"`}
       </h1>
 
-      <div className="navigation">
+      <div className="container d-flex flex-column align-items-center">
+      <div className="input-group mb-3 justify-content-center">
         <button
-          className={category === 'movies' ? 'active' : ''}
+          className={`btn btn-secondary ${category === 'movies' ? 'active' : ''}`}
           onClick={() => handleCategoryChange('movies')}
         >Popular Movies</button>
         <button
-          className={category === 'movies-trending' ? 'active' : ''}
+          className={`btn btn-secondary ${category === 'movies-trending' ? 'active' : ''}`}
           onClick={() => handleCategoryChange('movies-trending')}
         >Trending Movies</button>
         <button
-          className={category === 'movies-upcoming' ? 'active' : ''}
+          className={`btn btn-secondary ${category === 'movies-upcoming' ? 'active' : ''}`}
           onClick={() => handleCategoryChange('movies-upcoming')}
         >Upcoming Movies</button>
 
@@ -101,52 +102,64 @@ const Tmdb = () => {
         >
           Actors
         </button>*/}
-
-        <form className="search-form" onSubmit={handleSearchSubmit}>
+        </div>
+        <div className="input-group mb-3 justify-content-center" style={{ maxWidth: '450px', width: '100%' }}>
           <input
+            className="form-control"
+            id="search"
             type="text"
             placeholder="Search movies"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-          <button type="submit">Search</button>
-        </form>
+        <button className="btn btn-secondary" onClick={handleSearchSubmit}>Search</button>
       </div>
-
+      </div>
+      
       {selectedItem ? (
         // Render TmdbDetails when item is selected
         <TmdbDetails item={selectedItem} onClose={handleCloseDetails} />
       ) : (
-        <div className="movie-list">
+        <div className="container movie-list">
+          <div className="row movie-list gx-4 gy-4 justify-content-center">
           {displayItems.length > 0 ? (
             displayItems.map((item) => (
               <div
                 key={item.id}
-                className="movie-card"
+                className="movie-card col-9 col-sm-6 col-md-4 col-lg-3"
                 onClick={() => handleItemClick(item)}
               >
+                <div className="card h-100">
                 {(item.poster_path || item.profile_path) && (
+                  <div className="d-flex justify-content-center align-items-center" style={{}}>
                   <img
+                    className="card-img-top"
                     src={`https://image.tmdb.org/t/p/w200${item.poster_path || item.profile_path}`}
                     alt={item.title || item.name}
+                    style={{ objectFit: "cover" }}
                   />
+                  </div>
                 )}
-                <h2>{item.title || item.name}</h2>
+                <div className="card-body">
+                <h4 className="h4 mt-2">{item.title || item.name}</h4>
                 {category !== 'person' && (
                   <>
-                    <p>
+                    <p className="card-text">
                       <strong>Release Date:</strong>{' '}
                       {item.release_date || item.first_air_date || 'N/A'}
                     </p>
-                    <p>{item.overview}</p>
+                    <p className="card-text">{item.overview}</p>
                   </>
                 )}
+              </div>
+              </div>
               </div>
             ))
           ) : (
             <p>No results found.</p>
           )}
         </div>
+      </div>
       )}
     </div>
   );

@@ -162,9 +162,11 @@ const Finnkino = () => {
   };
 
   return (
-    <div>
-      <h1>Finnkino Theatres</h1>
-      <select onChange={handleAreaChange} value={selectedArea}>
+    <div className='container'>
+      <h1 className='mb-4'>Finnkino Theatres</h1>
+      <div className='row gx-3 mb-4'>
+      <div className='col'>
+      <select className='form-select col' data-bs-theme='dark' onChange={handleAreaChange} value={selectedArea}>
         <option value="">Select Area</option>
         {areas.map((area) => (
           <option key={area.id} value={area.id}>
@@ -172,15 +174,20 @@ const Finnkino = () => {
           </option>
         ))}
       </select>
-      <select onChange={handleDateChange} value={currentDate}>
+      </div>
+      <div className='col'>
+      <select className='form-select' onChange={handleDateChange} value={currentDate}>
         {dateOptions.map((date, index) => (
           <option key={index} value={date}>
             {date}
           </option>
         ))}
       </select>
-
-      <div>
+      </div>
+      </div>
+      
+      <div className='row'>
+      <div className='col-6'>
         {loading ? (
           <p>Loading...</p>
         ) : schedules.length > 0 ? (
@@ -206,7 +213,7 @@ const Finnkino = () => {
           <p>No schedules available</p>
         )}
       </div>
-
+      <div className='col-6'>
       {showReviewModal && selectedMovie && (
         <MovieDetails
        
@@ -216,6 +223,8 @@ const Finnkino = () => {
           fetchReviews={fetchReviews}
         />
       )}
+    </div>
+    </div>
     </div>
   );
 };

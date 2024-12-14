@@ -13,15 +13,18 @@ function LoginForm() {
     e.preventDefault();
     try {
       await signIn(email, password);
-      navigate('/Tmdb');
+      navigate('/');
     } catch (error) {
       setMessage(error.response?.data?.message || 'An error occurred.');
     }
   };
 
   return (
+    <div className="login-form container-sm mt-5">
     <form onSubmit={handleSubmit}>
+      <div className="input-group">
       <input
+        className="form-control"
         type="email"
         value={email}
         onChange={(e) => {
@@ -32,15 +35,18 @@ function LoginForm() {
         required
       />
       <input
+        className="form-control"
         type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Password"
         required
       />
-      <button type="submit">Login</button>
+      <button className="btn btn-secondary" type="submit">Login</button>
       {message && <p>{message}</p>}
+      </div>
     </form>
+    </div>
   );
 }
 

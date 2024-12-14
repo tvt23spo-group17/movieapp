@@ -47,8 +47,11 @@ function RegisterForm() {
   };
 
   return (
+    <div className="register-form container-sm mt-5">
     <form onSubmit={handleSubmit}>
+      <div className="input-group">
       <input
+        className="form-control"
         type="email"
         value={email}
         onChange={(e) => {
@@ -59,22 +62,25 @@ function RegisterForm() {
         required
       />
       <input
+        className="form-control"
         type="password"
         value={password}
         onChange={handlePasswordChange}
         placeholder="Password"
         required
       />
-      <button type="submit" disabled={passwordErrors.length > 0}>Register</button>
-      {passwordErrors.length > 0 && (
-        <ul>
+      <button className="btn btn-secondary" type="submit" disabled={passwordErrors.length > 0}>Register</button>
+      </div>
+    </form>
+    {passwordErrors.length > 0 && (
+        <ul className="list-group mt-3">
           {passwordErrors.map((error, index) => (
-            <li key={index}>{error}</li>
+            <li className="list-group-item" key={index}>{error}</li>
           ))}
         </ul>
       )}
-      {message && <p>{message}</p>}
-    </form>
+    {message && <p>{message}</p>}
+    </div>
   );
 }
 

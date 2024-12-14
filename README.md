@@ -8,7 +8,7 @@ This repository contains the **MovieApp**, which is divided into two main folder
 ---
 ## Resources
 
-- **Database Diagram**: ![Database Diagram](./path-to-diagram/db-diagram.png)
+- **Database Diagram**: ![Database Diagram](./dbdiagram.png)
 - **UI Design**: [Figma or design tool link](#)
 - **Work Hours**: [Work Hours Documentation](#)
 ---

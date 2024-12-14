@@ -132,7 +132,7 @@ const handleGroupPageMovie = (user) => {
 //console.log(user_id)
 //console.log("toimiiko lehvahaku")
 
-axios.get(url + "/groupMember/movie_sched/", {
+axios.get(url + "/groupMember/movie_sched", {
   params: { user_id: user_id }
 } )
 .then(response => {
@@ -155,9 +155,10 @@ const handleGroupMovieShow = () => {
     alert("Please select a movie first!");
     return;
   }
+  
   const selectedMovieDetails = groupMovies.find(movie => movie.local_title === selectedMovie);
- 
-  axios.post(`http://localhost:3001/groupMember/movie_sched/`,{
+  console.log('Selected movie details:', selectedMovieDetails);
+  axios.post(`http://localhost:3001/groupMember/movie_sched`,{
     group_id: group_id,
     local_title: selectedMovieDetails.local_title,
     show_time: selectedMovieDetails.show_time,
@@ -258,11 +259,12 @@ const leaveGroup = (group_id, creator_user_id, user_id) => {
 
 <div className="groupMovies"></div>
 
-<h4>Näytösaikoja</h4>
+<h3 className="mt-3">Showtimes</h3>
 
-        <select value={selectedMovie}
+        <div className="input-group mb-3">
+        <select class="form-select" value={selectedMovie}
         onChange={(e) => setSelectedMovie(e.target.value)}>
-          <option value="">Valitse näytösaika</option>
+          <option value="">Select Showtime</option>
           {groupMovies.length > 0 ? (
             groupMovies.map((groupMovie, index) => (
               <option
@@ -276,12 +278,13 @@ const leaveGroup = (group_id, creator_user_id, user_id) => {
             <option>No movies available</option>
           )}
         </select>
-        <button onClick={handleGroupMovieShow}>Talleta näytösaika ryhmälle</button>
+        <button className="btn btn-secondary" onClick={handleGroupMovieShow}>Save To Group</button>
+        </div>
         <div>
-        <ul>
+        <ul className="list-group">
         {movieShowtimes.length > 0 ? (
             movieShowtimes.map((movie, index) => (
-              <li key={index}>
+              <li className="list-group-item" key={index}>
                 {movie.local_title} - {new Date(movie.show_time).toLocaleString()}
               </li>
             ))
@@ -291,10 +294,7 @@ const leaveGroup = (group_id, creator_user_id, user_id) => {
         </ul>
         </div>
 
-<ul>
-<button onClick={() => leaveGroup(group_id)}>Leave Group</button>
-
-</ul>
+<button className="btn btn-danger mt-3 mb-3" onClick={() => leaveGroup(group_id)}>Leave Group</button>
     </div>
 
   );

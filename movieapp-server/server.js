@@ -21,24 +21,12 @@ app.use(express.json());
 dotenv.config();
 const PORT = process.env.PORT;
 
-
-
-
 app.get('/protected', verifyToken, (req, res) => {
   res.json({
     message: 'This is a protected route',
     user: req.user,
   });
 }); 
-
-
-
-
-
-
-
-
-
 
 app.use('/', favoritesRouter);
 app.use('/', userRouter);
@@ -47,7 +35,6 @@ app.use('/finnkino', finnkinoRouter);
 app.use('/api', tmdbRouter);
 app.use('/details', detailRouter);
 app.use('/', memberRouter);
-app.use('/', groupRouter);
 app.use('/', groupRouter);
 app.use('/', groupMemberRouter);
 

@@ -92,7 +92,7 @@ router.get('/groupMember/:group_id/members/:user_id', async (req, res) => {
   });
   
   
-  router.get('/groupMember/movie_sched/', async (req, res) => {
+  router.get('/groupMember/movie_sched', async (req, res) => {
     const { user_id } = req.query;
   console.log('toimiiko lehvahaku')
     try {
@@ -109,7 +109,7 @@ router.get('/groupMember/:group_id/members/:user_id', async (req, res) => {
   });
   
   
-  router.post('/groupMember/movie_sched/', async (req, res) => {
+  router.post('/groupMember/movie_sched', async (req, res) => {
     //const { group_id } = req.params;
     const { group_id, local_title, show_time } = req.body;
     try {

@@ -133,7 +133,6 @@ const Finnkino = () => {
   
       if (data.error) {
         console.error('Error fetching TMDB ID:', data.error);
-        alert(`TMDB Error: ${data.error}`);
       } else {
         const tmdb_id = data.tmdb_id;
         schedule.tmdb_id = tmdb_id; // Attach tmdb_id to the schedule

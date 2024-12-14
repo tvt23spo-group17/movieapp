@@ -10,7 +10,7 @@ import cors from 'cors';
 const router = Router();
 
 
-router.post('/api/groups/', async (req, res) => {
+router.post('/api/groups', async (req, res) => {
   console.log('toimii1');
     const { name, creator_user_id } = req.body;
     if (!name || !creator_user_id) {

@@ -49,9 +49,6 @@ const handleGroupMovie = (user) => {
             ? `(${selectedMovie.productionYear})`
             : ''}
         </h2>
-        {user && selectedMovie.tmdb_id && (
-          <FavoritesToggle tmdb_id={selectedMovie.tmdb_id} />
-        )}
         <img src={selectedMovie.eventMediumImagePortrait} alt={selectedMovie.title} />
         <p>{selectedMovie.genres}<img className='rating-img' src={selectedMovie.ratingImageUrl} /></p>
         <p>{selectedMovie.presentationMethodAndLanguage}</p>
@@ -59,7 +56,7 @@ const handleGroupMovie = (user) => {
         {user && selectedMovie.tmdb_id && (
           <FavoritesToggle tmdb_id={selectedMovie.tmdb_id} />
         )}
-        <button onClick={handleGroupMovie}>Talleta näytösaika</button>
+        <button className="btn btn-secondary mb-2" onClick={handleGroupMovie}>Talleta näytösaika</button>
         <ReviewSection
           onClose={() => setShowReviewModal(false)}
           setShowReviewModal={setShowReviewModal}

@@ -131,11 +131,17 @@ This repository contains the **MovieApp**, which is divided into two main folder
 
 3. Update the `.env` files in the **movieapp-server** folder with your database credentials and tokens:
    ```plaintext
+   PORT=your_port
    DB_USER=your_db_username
    DB_PASSWORD=your_db_password
    DB_NAME=your_db_name
    DB_HOST=localhost
    DB_PORT=5432
+   TEST_DB_USER=postgres
+   TEST_DB_HOST=localhost
+   TEST_DB_NAME=movieapp_test
+   TEST_DB_PASSWORD=pass
+   TEST_DB_PORT=5432
    TMDB_TOKEN='your_tmdb_token'
    JWT_SECRET='your_refresh_secret'
    JWT_REFRESH_SECRET='your_refresh_secret'

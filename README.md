@@ -3,7 +3,7 @@ Made by **Aleksi Jokinen** and **Lasse Töyräs**
 
 This repository contains the **MovieApp**, which is divided into two main folders:
 
-1. **movieapp-client**: Frontend of the application (React-based).
+1. **movieapp**: Frontend of the application (React-based).
 2. **movieapp-server**: Backend of the application (Node.js with Express).
 
 ---

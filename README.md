@@ -143,7 +143,7 @@ This repository contains the **MovieApp**, which is divided into two main folder
    TEST_DB_PASSWORD=pass
    TEST_DB_PORT=5432
    TMDB_TOKEN='your_tmdb_token'
-   JWT_SECRET='your_refresh_secret'
+   JWT_SECRET='your_secret'
    JWT_REFRESH_SECRET='your_refresh_secret'
    ```
 

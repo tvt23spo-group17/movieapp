@@ -21,10 +21,11 @@ const MovieDetails = ({
   const formattedEventTime = eventDate.toLocaleString('fi-FI');
 
 const handleGroupMovie = (user) => {
-  //console.log('onnistui')
-  //console.log(`Saving showtime for movie: ${selectedMovie.eventTime}`)
- 
-  //console.log(user_id)
+  if (!user) {
+    
+    return; 
+  }
+
  axios.post(`http://localhost:3001/groupMember/movie_sched/${user_id}`,{
   local_title: selectedMovie.title,
   show_time: selectedMovie.eventTime

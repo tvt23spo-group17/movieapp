@@ -123,7 +123,7 @@ This repository contains the **MovieApp**, which is divided into two main folder
     group_id INTEGER REFERENCES user_group(group_id) ON DELETE CASCADE,
     user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
     local_title VARCHAR(255) NOT NULL,
-    show_time VARCHAR(255) NOT NULL,
+    show_time TIMESTAMP,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
     );  
